@@ -1,0 +1,20 @@
+{
+    "name": "nabre/quickadmin",
+    "description": "Quickadmin panel",
+    "license": "MIT",
+    "require": {
+        "jenssegers/mongodb": "^3.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nabre\\Quickadmin\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nabre\\Quickadmin\\Providers\\AppServiceProvider"
+            ]
+        }
+    }
+}
