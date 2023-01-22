@@ -10,9 +10,7 @@ trait RecursiveSaveTrait
         $value = $this;
         collect(explode(".", $name))->each(function ($v) use (&$value) {
             if (!is_null($value)) {
-                if (in_array($v, $this->getFillable())) {
-                    $value = $value->getRawOriginal($v);
-                } elseif (!is_null($rel = $this->relationshipFind($v))) {
+                if (!is_null($rel = $this->relationshipFind($v))) {
                     $value = $value->$v;
                     switch ($rel->type) {
                         case "BelongsTo":
@@ -24,6 +22,8 @@ trait RecursiveSaveTrait
                             $value = optional($value)->modelKeys();
                             break;
                     }
+                } elseif (in_array($v, $this->getFillable())) {
+                    $value = $value->getRawOriginal($v);
                 } else {
                     $value = $value->$v;
                 }
@@ -101,12 +101,12 @@ trait RecursiveSaveTrait
 
         $this->fill($dataFill);
 
-        $items = $relations->whereIn('name', array_keys($data));
-        if ($items->count()) {
+        $relItems = $relations->whereIn('name', array_keys($data));
+        if ($relItems->count()) {
             $this->makeSave(is_null(data_get($this, $this->getKeyName())) ? false : $saveQuietly);
         }
 
-        $items->map(fn ($i) => data_set($i, 'value', data_get($data, data_get($i, 'name'))))
+        $relItems->map(fn ($i) => data_set($i, 'value', data_get($data, data_get($i, 'name'))))
             ->each(function ($rel) use ($syncBool, $saveQuietly) {
                 $name = data_get($rel, 'name');
                 $type = data_get($rel, 'type');
@@ -137,10 +137,8 @@ trait RecursiveSaveTrait
                     case 'BelongsTo':
                         $cont->dissociate();
                         if (!is_null($instance)) {
-
                             $cont->associate($instance->first());
                         }
-                    //   dd(get_defined_vars());
                         break;
                     case 'BelongsToMany':
                         if (!is_null($instance)) {
