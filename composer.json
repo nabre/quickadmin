@@ -5,7 +5,8 @@
     "require": {
         "jenssegers/mongodb": "^3.9",
         "mostafamaklad/laravel-permission-mongodb": "^4.0",
-        "arrilot/laravel-widgets": "^3.13"
+        "arrilot/laravel-widgets": "^3.13",
+        "lavary/laravel-menu": "^1.8"
     },
     "autoload": {
         "psr-4": {
