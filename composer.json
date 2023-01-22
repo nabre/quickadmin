@@ -4,7 +4,8 @@
     "license": "MIT",
     "require": {
         "jenssegers/mongodb": "^3.9",
-        "mostafamaklad/laravel-permission-mongodb": "^4.0"
+        "mostafamaklad/laravel-permission-mongodb": "^4.0",
+        "arrilot/laravel-widgets": "^3.13"
     },
     "autoload": {
         "psr-4": {
