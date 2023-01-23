@@ -1,9 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Nabre\Quickadmin\Http\Controllers\Auth\NewPasswordController;
+use Nabre\Quickadmin\Http\Controllers\Auth\VerifyEmailController;
+use Nabre\Quickadmin\Http\Controllers\Auth\RegisteredUserController;
+use Nabre\Quickadmin\Http\Controllers\Auth\PasswordResetLinkController;
+use Nabre\Quickadmin\Http\Controllers\Auth\ConfirmablePasswordController;
+use Nabre\Quickadmin\Http\Controllers\Auth\AuthenticatedSessionController;
+use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationPromptController;
+use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 Route::group(['middleware' => ['web']],   function () {
-
 
     //if(config('setting.app.auth.register',0)){
     Route::get('/register', [RegisteredUserController::class, 'create'])

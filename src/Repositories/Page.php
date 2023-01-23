@@ -2,11 +2,33 @@
 
 namespace Nabre\Quickadmin\Repositories;
 
+use Collective\Html\HtmlFacade as Html;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 class Page
 {
+    function add(&$menu, $route,?string $parent=null, bool $boolIcon = false, bool $boolText = false)
+    {
+        $class = config('routeicons.' . $route);
+        if (is_null($class)) {
+            $boolIcon = false;
+        }
+
+        $icon = $boolIcon ? (Html::tag('i', null, compact('class')) ?? null) : null;
+        if (is_null($icon)) {
+            $boolText = true;
+        }
+
+        $title = __('nabre-quickadmin::route.' . $route) ?? $route;
+        $text = $boolText ? (($boolIcon ? ' ' : null) . $title) : null;
+
+        $menu->add($text, compact('route', 'title','parent'))
+            ->prepend($icon)->nickname($route);
+
+        return $menu->get($route)->id;
+    }
+
     function middleware(array $middleware)
     {
         $user = Auth::user();

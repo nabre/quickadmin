@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class ResourceRegistrar extends OriginalRegistrar
 {
-
     protected $resourceDefaults = ['index', 'create', 'store', 'copy', 'show', 'edit', 'update', 'destroy','reset','position' /*,'pdf'*/];
 
     function getResourceDefault(){

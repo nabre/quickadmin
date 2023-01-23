@@ -18,7 +18,6 @@ class MacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         Collection::macro('whereDoesntHave',function($key){
             return $this->filter(function($item)use($key){
                 $string=Str::random(40);
