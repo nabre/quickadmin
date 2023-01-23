@@ -2,20 +2,26 @@
 
 namespace Nabre\Quickadmin\Support;
 
-trait Facade
+use RuntimeException;
+
+abstract class Facade
 {
     protected static function resolveFacade($name)
     {
-        return is_null($name) ? new self : data_get(app(), $name) ?? new self;
+        if (!class_exists($name) && is_null($instance = data_get(app(), $name))) {
+            throw ('Error');
+        }
+        return $instance ?? new $name;
     }
 
     protected static function getFacadeAccessor()
     {
-        return null;
+        throw new RuntimeException('Facade does not implement getFacadeAccessor method.');
     }
+
 
     public static function __callStatic($method, $args)
     {
-        return self::resolveFacade(self::getFacadeAccessor())->$method(...$args);
+        return static::resolveFacade(static::getFacadeAccessor())->$method(...$args);
     }
 }

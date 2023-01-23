@@ -2,20 +2,22 @@
 
 namespace Nabre\Quickadmin\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Nabre\Quickadmin\Http\Middleware\GenerateMenu;
-use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
-use Nabre\Quickadmin\Repositories\LocalizationRepositorie;
-use Nabre\Quickadmin\Setting\Facade as SettingFacade;
-use Nabre\Quickadmin\Setting\Manager;
-use Blade;
 use Lavary\Menu\Menu as LavaryMenu;
-use Nabre\Quickadmin\Repositories\Menu\Menu;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
+use Nabre\Quickadmin\Setting\Manager;
+use Illuminate\Support\ServiceProvider;
+use Nabre\Quickadmin\Repositories\Menu;
+use Nabre\Quickadmin\Http\Middleware\GenerateMenu;
+use Nabre\Quickadmin\Setting\Facade as SettingFacade;
+use Nabre\Quickadmin\Repositories\LocalizationRepositorie;
+use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
         \Illuminate\Routing\ResourceRegistrar::class => \Nabre\Quickadmin\Routing\ResourceRegistrar::class,
+        LavaryMenu::class => Menu::class,
     ];
 
     function boot(\Illuminate\Routing\Router $router, \Illuminate\Contracts\Http\Kernel $kernel)
@@ -47,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Providers
          */
+        $this->app->register(RouteServiceProvider::class);
         $this->app->register(MacroServiceProvider::class);
         $this->app->register(\Collective\Html\HtmlServiceProvider::class);
 
@@ -66,10 +69,6 @@ class AppServiceProvider extends ServiceProvider
          */
         $this->app->singleton(LocalizationRepositorie::class, function ($app) {
             return new LocalizationRepositorie;
-        });
-
-        $this->app->singleton(LavaryMenu::class, function ($app) {
-            return new Menu;
         });
 
         /**
