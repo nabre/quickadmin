@@ -12,13 +12,35 @@ use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationPromptController;
 use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 Route::name("quickadmin.")->group(function () {
-    Route::name("admin.")->prefix('admin')/*->middleware(['role:admin'])*/->group(function () {
-        Route::get(null, function () {
-            return redirect()->route('quickadmin.admin.dashboard.index');
-        })->name('rdr');
+    Route::middleware(['verified','auth'])->group(function () {
+        Route::name("user.")->prefix('user')->group(function () {
+            Route::get(null, function () {
+                return redirect()->route('quickadmin.user.dashboard.index');
+            })->name('rdr');
+            Route::resource('dashboard', DashboardController::class, ['key' => 'data'])->only('index');
+        });
 
-        Route::resource('dashboard', DashboardController::class, ['key' => 'data'])->only('index');
+        Route::name("admin.")->prefix('admin')->middleware(['role:admin'])->group(function () {
+            Route::get(null, function () {
+                return redirect()->route('quickadmin.admin.dashboard.index');
+            })->name('rdr');
+            Route::resource('dashboard', DashboardController::class, ['key' => 'data'])->only('index');
+        });
+
+        Route::name("manage.")->prefix('manage')->middleware(['role:manage'])->group(function () {
+            Route::get(null, function () {
+                return redirect()->route('quickadmin.manage.dashboard.index');
+            })->name('rdr');
+            Route::resource('dashboard', DashboardController::class, ['key' => 'data'])->only('index');
+        });
     });
+
+    Route::name('authentication')->get(
+        'authentication',
+        function () {
+            return redirect()->route('login');
+        }
+    );
 });
 
 Route::get('/register', [RegisteredUserController::class, 'create'])

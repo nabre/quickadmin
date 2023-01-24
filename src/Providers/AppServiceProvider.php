@@ -53,10 +53,7 @@ class AppServiceProvider extends ServiceProvider
          */
         $this->mergeConfigFrom(__DIR__ . '/../../config/setting.php', 'setting');
 
-        /**
-         * Translation
-         */
-        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'nabre-quickadmin');
+
     }
 
     function boot(\Illuminate\Routing\Router $router, \Illuminate\Contracts\Http\Kernel $kernel)
@@ -68,9 +65,16 @@ class AppServiceProvider extends ServiceProvider
          */
         $this->publishes([
             __DIR__.'/../../config/routeicons.php' => config_path('routeicons.php'),
-        ]);
+        ],'nabre-quickadmin');
         $this->mergeConfigFrom(__DIR__ . '/../../config/routeicons.php', 'routeicons');
 
+        /**
+         * Translation
+         */
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'nabre-quickadmin');
+        $this->publishes([
+            __DIR__.'/../../lang' => $this->app->langPath('vendor/nabre-quickadmin'),
+        ],'nabre-quickadmin');
         /**
          * Setting
          */

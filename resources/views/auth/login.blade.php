@@ -1,1 +1,1 @@
-Form Login
+@include('nabre-quickadmin::quick.admin')

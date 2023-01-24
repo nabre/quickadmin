@@ -1,4 +1,2 @@
 @extends('nabre-quickadmin::skeleton.html')
-@section('BODY')
-ADMIN QUICK
-@endsection
+@extends('nabre-quickadmin::skeleton.body.fluid')
