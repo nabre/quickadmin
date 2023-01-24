@@ -5,6 +5,7 @@ namespace Nabre\Quickadmin\Repositories;
 use Collective\Html\HtmlFacade as Html;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Menu;
 
 class Page
 {
@@ -27,6 +28,27 @@ class Page
             ->prepend($icon)->nickname($route);
 
         return $menu->get($route)->id;
+    }
+
+    function breadcrumbs($name='Breadcrumbs'){
+        $menu=$this->menuPrint($name);
+        return is_null($menu)?null:$menu->crumbMenu();
+    }
+
+    function menuPrint($name){
+        $menu=$this->getMenu($name);
+        if(!$this->menuCheck($menu)){
+            return null;
+        }
+        return $menu;
+    }
+
+    protected function getMenu($name){
+        return Menu::get($name);
+    }
+
+    protected function menuCheck($menu){
+        return !is_null($menu);
     }
 
     function middleware(array $middleware)

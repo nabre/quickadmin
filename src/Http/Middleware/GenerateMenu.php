@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Nabre\Quickadmin\Facades\Repositories\Page;
 
+
 class GenerateMenu
 {
     public function handle(Request $request, Closure $next): mixed
