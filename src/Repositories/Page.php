@@ -32,7 +32,10 @@ class Page
 
     function breadcrumbs($name='Breadcrumbs'){
         $menu=$this->menuPrint($name);
-        return is_null($menu)?null:$menu->crumbMenu();
+        if(is_null($menu) || ($bread=$menu->crumbMenu())->all()->count()<=1){
+            return optional();
+        }
+        return $bread;
     }
 
     function menuPrint($name){

@@ -16,6 +16,7 @@ class GenerateMenu
         });
 
         \Menu::make('QuickBar', function ($menu) {
+            Page::add($menu, 'quickadmin.admin.rdr',null,true);
             Page::add($menu, 'login',null,true);
             Page::add($menu, 'logout',null,true);
         });
