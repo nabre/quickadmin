@@ -53,6 +53,25 @@ class Page
         );
     }
 
+    function menu($name,$class='navbar-nav', $view = 'nabre-quickadmin::laravel-menu.bootstrap-navbar-items')
+    {
+        $menu = $this->menuPrint($name);
+        if (is_null($menu)) {
+            return null;
+        }
+        return Html::tag(
+            'ul',
+            view($view, ['items' => $menu->roots()]),
+            compact('class')
+        );
+    }
+
+    function titlePage($name = 'Breadcrumbs'){
+        $active=optional(optional($this->menuPrint($name))->active());
+        $title=$active->title;
+        return $title ?? null;
+    }
+
     function menuPrint($name)
     {
         $menu = $this->getMenu($name);

@@ -3,27 +3,40 @@
 return [
     'quickadmin' =>
     [
-        'authentication'=>'Autenticazione',
+        'authentication' => 'Autenticazione',
         'admin' => [
             'rdr' => 'Admin',
             'dashboard' => [
-                'index' => 'Dash',
+                'index' => 'Dashboard',
+            ],
+            'users' => [
+                'rdr' => 'Utenti',
+                'list' => [
+                    'index' => 'Elenco'
+                ],
+                'roles' => [
+                    'index' => 'Ruoli'
+                ],
+                'permissions' => [
+                    'index' => 'Permessi'
+                ],
             ],
         ],
         'manage' => [
             'rdr' => 'Gestione',
             'dashboard' => [
-                'index' => 'Dash',
+                'index' => 'Dashboard',
             ],
         ],
         'user' => [
             'rdr' => 'User',
             'dashboard' => [
-                'index' => 'Dash',
+                'index' => 'Dashboard',
             ],
         ]
     ],
-    'welcome' => 'Home',
     'login' => 'Accesso',
     'logout' => 'Disconnetti',
+    'password' => ['request' => 'Password dimenticata'],
+    'welcome' => 'Home',
 ];

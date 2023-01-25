@@ -1,6 +1,6 @@
 <?php
 
-namespace Nabre\QuickAdmin\Permission\Traits;
+namespace Nabre\Quickadmin\Permission\Traits;
 
 use App\Models\Role as ModelsRole;
 use Illuminate\Support\Collection;

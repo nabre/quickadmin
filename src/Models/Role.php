@@ -17,14 +17,18 @@ class Role extends Original
     protected $fillable = [
         'name',
         'slug',
+        'route_unused',
         'guard_name',
+        'priority',
     ];
     protected $attributes = [
         'guard_name' => 'web',
+        'route_used' => false,
     ];
 
     protected $casts = [
         'slug' => LocalCast::class,
+        'route_used'=>'bool',
     ];
 
     function getEtiAttribute()
@@ -47,5 +51,9 @@ class Role extends Original
     function getShowStringAttribute()
     {
         return $this->name;
+    }
+
+    function getDestroyEnabledAttribute(){
+        return !$this->route_used;
     }
 }

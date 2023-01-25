@@ -6,6 +6,8 @@
 
 <body>
     @yield('BODY')
+
+    @include('nabre-quickadmin::skeleton.code.footer')
 </body>
 
 </html>
