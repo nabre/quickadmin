@@ -1,10 +1,12 @@
 <?php
 
-namespace Nabre\Console\Commands\Roles;
+namespace Nabre\Quickadmin\Console\Commands\Update;
 
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-
+use Nabre\Quickadmin\Facades\Routing\RouteHierarchy;
 
 class PermissionCommand extends Command
 {
@@ -13,14 +15,29 @@ class PermissionCommand extends Command
 
     public function handle()
     {
-        $middlewares=collect([]);
-      /*  (new RouteHierarchy)->routeGetList()->pluck('name')->each(function($name)use(&$middlewares){
-            $middlewares=$middlewares->merge(\Route::getRoutes()->getByName($name)->middleware())->unique()->sort()->values();
-        });
-        $roles=$middlewares->like(null,'role:%')->values();
-        $permissions=$middlewares->like(null,'permission:%')->values();
-        collect(compact('roles','permissions'))->each(function($i,$type){
+        Role::where('route_used',true)->update(['route_used'=>false]);
+        Permission::where('route_used',true)->update(['route_used'=>false]);
 
-        });*/
+        RouteHierarchy::middlewareList()->each(function ($i) {
+            $type = data_get($i, 'type');
+            switch ($type) {
+                case "role":
+                    $model = new Role;
+                    break;
+                case "permission":
+                    $model = new Permission;
+                    break;
+            }
+            $name=data_get($i,'name');
+
+            $result=$model->where('name',$name)->get();
+            if($result->count()){
+                $result=$result->first();
+            }else{
+                $result=$model->make();
+            }
+            $route_used=true;
+            $result->recursiveSave(compact('name','route_used'));
+        });
     }
 }

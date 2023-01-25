@@ -8,5 +8,6 @@ class ListForm extends Form{
         $this->add('name');
         $this->add('email');
         $this->add('roles')->listLabel('name');
+        $this->add('disabled');
     }
 }

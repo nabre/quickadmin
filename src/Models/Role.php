@@ -17,7 +17,7 @@ class Role extends Original
     protected $fillable = [
         'name',
         'slug',
-        'route_unused',
+        'route_used',
         'guard_name',
         'priority',
     ];
@@ -28,7 +28,7 @@ class Role extends Original
 
     protected $casts = [
         'slug' => LocalCast::class,
-        'route_used'=>'bool',
+        'route_used' => 'boolean',
     ];
 
     function getEtiAttribute()
@@ -53,7 +53,12 @@ class Role extends Original
         return $this->name;
     }
 
-    function getDestroyEnabledAttribute(){
-        return !$this->route_used;
+    function getDestroyEnabledAttribute()
+    {
+        $count = 0;
+        $this->definedRelations()->pluck('name')->each(function ($name) use (&$count) {
+            $count += $this->$name()->get()->count();
+        });
+        return !$this->route_used && !$count;
     }
 }

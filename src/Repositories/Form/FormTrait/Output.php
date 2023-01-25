@@ -35,6 +35,7 @@ trait Output
                                 $enabled = $enabled->push(Field::FIELD_TYPE_LIST);
                                 break;
                             case "boolean":
+                            case "bool":
                                 $enabled = $enabled->push(Field::BOOLEAN);
                                 break;
                             case CkeditorCast::class:

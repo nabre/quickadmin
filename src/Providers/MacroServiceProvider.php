@@ -18,17 +18,17 @@ class MacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Collection::macro('whereDoesntHave',function($key){
-            return $this->filter(function($item)use($key){
-                $string=Str::random(40);
-                return data_get($item, $key,$string)==$string;
+        Collection::macro('whereDoesntHave', function ($key) {
+            return $this->filter(function ($item) use ($key) {
+                $string = Str::random(40);
+                return data_get($item, $key, $string) == $string;
             });
         });
 
-        Collection::macro('whereHas',function($key){
-            return $this->reject(function($item)use($key){
-                $string=Str::random(40);
-                return data_get($item, $key,$string)==$string;
+        Collection::macro('whereHas', function ($key) {
+            return $this->reject(function ($item) use ($key) {
+                $string = Str::random(40);
+                return data_get($item, $key, $string) == $string;
             });
         });
 
@@ -93,7 +93,7 @@ class MacroServiceProvider extends ServiceProvider
                     'uri'        => $route->uri(),
                     'name'       => $route->getName(),
                     'action'     => $route->getActionName(),
-                    //'middleware' => $route->middleware(),
+                    'middleware' => $route->middleware(),
                 ];
             })->sortBy('uri')->values();
             return $routes;
@@ -147,11 +147,11 @@ class MacroServiceProvider extends ServiceProvider
             return Html::tag('td', $content, $options);
         });
 
-        Form::macro('passwordToggle', function ($name=null,$value=null, $options = []) {
-            $input=Form::input('password', $name, $value, $options);
-            $icon=Html::tag('i',null,['class'=>'fa-regular fa-eye']).Html::tag('i',null,['class'=>'fa-regular fa-eye-slash','style'=>'display:none']);
-            $span=Html::tag('span',$icon,['class'=>"btn btn-outline-dark toggle-password"]);
-            return Html::div($input.$span,['class'=>'input-group']);
+        Form::macro('passwordToggle', function ($name = null, $value = null, $options = []) {
+            $input = Form::input('password', $name, $value, $options);
+            $icon = Html::tag('i', null, ['class' => 'fa-regular fa-eye']) . Html::tag('i', null, ['class' => 'fa-regular fa-eye-slash', 'style' => 'display:none']);
+            $span = Html::tag('span', $icon, ['class' => "btn btn-outline-dark toggle-password"]);
+            return Html::div($input . $span, ['class' => 'input-group']);
         });
     }
 }

@@ -14,6 +14,7 @@ use Nabre\Quickadmin\Http\Middleware\GenerateMenu;
 use Nabre\Quickadmin\Setting\Facade as SettingFacade;
 use App\Http\Middleware\GenerateMenu as AppGenerateMenu;
 use Nabre\Quickadmin\Repositories\LocalizationRepositorie;
+use Nabre\Quickadmin\Console\Commands\Update\PermissionCommand;
 use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
 
 class AppServiceProvider extends ServiceProvider
@@ -73,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
         ], 'nabre-quickadmin');
         $this->mergeConfigFrom(__DIR__ . '/../../config/routeicons.php', 'routeicons');
 
-        $this->loadViewComponentsAs('',[
+        $this->loadViewComponentsAs('', [
             AppLayout::class,
             GuestLayout::class,
         ]);
@@ -84,6 +85,14 @@ class AppServiceProvider extends ServiceProvider
             return class_exists(AppGenerateMenu::class) ? new AppGenerateMenu : new GenerateMenu;
         });
 
+        /**
+         * Commands
+         */
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PermissionCommand::class,
+            ]);
+        }
 
 
         /**

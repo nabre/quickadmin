@@ -3,6 +3,7 @@
 namespace Nabre\Quickadmin\Http\Controllers\Admin\Users;
 
 use App\Models\Permission as Model;
+use Nabre\Quickadmin\Facades\Routing\RouteHierarchy;
 use Nabre\Quickadmin\Forms\Admin\Users\PermissionsForm as Form;
 use Nabre\Quickadmin\Http\Controllers\Controller;
 

@@ -166,8 +166,7 @@ class Field
                 $options['role'] = 'switch';
                 self::classAdd($options['class'], "form-check-input");
                 $html = Html::div(
-                    Form::hidden(null, 0, ['id' => null]) .
-                        Form::input('checkbox', null, true, $options),
+                    Form::input('checkbox', null, true, $options),
                     ['class' => 'form-check form-switch']
                 );
                 break;
