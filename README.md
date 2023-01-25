@@ -22,8 +22,6 @@ composer create-project laravel/laravel example-app
 ## Modifica file
 Editare il file
 
-
-```
 ## Modifica file /routes/web.php
 ```php
 <?php
