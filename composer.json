@@ -13,11 +13,13 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "laravie/html": "^7.3",
-        "livewire/livewire": "^2.11"
+        "livewire/livewire": "^2.11",
+        "laravel-lang/lang": "^12.13"
     },
     "autoload": {
         "psr-4": {
-            "Nabre\\Quickadmin\\": "src/"
+            "Nabre\\Quickadmin\\": "src/",
+            "Nabre\\Quickadmin\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {

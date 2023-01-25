@@ -9,7 +9,7 @@ use Menu;
 
 class Page
 {
-    function add(&$menu, $route,?string $parent=null, bool $boolIcon = false, bool $boolText = false)
+    function add(&$menu, $route, $parent = null, bool $boolIcon = false, bool $boolText = false)
     {
         $class = config('routeicons.' . $route);
         if (is_null($class)) {
@@ -24,30 +24,70 @@ class Page
         $title = __('nabre-quickadmin::route.' . $route) ?? $route;
         $text = $boolText ? (($boolIcon ? ' ' : null) . $title) : null;
 
-        $menu->add($text, compact('route', 'title','parent'))
+        if (is_array($parent)) {
+            $param = array_merge(compact('route', 'title'), $parent);
+        } else {
+            $param = compact('route', 'title', 'parent');
+        }
+
+        $menu->add($text, $param)
             ->prepend($icon)->nickname($route);
 
         return $menu->get($route)->id;
     }
 
-    function breadcrumbs($name='Breadcrumbs'){
-        $menu=$this->menuPrint($name);
-        return is_null($menu)?null:$menu->crumbMenu();
+    function breadcrumbs($name = 'Breadcrumbs')
+    {
+        $menu = $this->menuPrint($name);
+        if (is_null($menu) || is_null($menu->active()) || ($bread = optional($menu)->crumbMenu())->all()->count() <= 1) {
+            return null;
+        }
+        return Html::tag(
+            'nav',
+            Html::tag(
+                'ol',
+                view('nabre-quickadmin::laravel-menu.breadcrumb', ['items' => $bread->roots()]),
+                ['class' => 'breadcrumb']
+            ),
+            ["aria-label" => "breadcrumb"]
+        );
     }
 
-    function menuPrint($name){
-        $menu=$this->getMenu($name);
-        if(!$this->menuCheck($menu)){
+    function menu($name,$class='navbar-nav', $view = 'nabre-quickadmin::laravel-menu.bootstrap-navbar-items')
+    {
+        $menu = $this->menuPrint($name);
+        if (is_null($menu)) {
+            return null;
+        }
+        return Html::tag(
+            'ul',
+            view($view, ['items' => $menu->roots()]),
+            compact('class')
+        );
+    }
+
+    function titlePage($name = 'Breadcrumbs'){
+        $active=optional(optional($this->menuPrint($name))->active());
+        $title=$active->title;
+        return $title ?? null;
+    }
+
+    function menuPrint($name)
+    {
+        $menu = $this->getMenu($name);
+        if (!$this->menuCheck($menu)) {
             return null;
         }
         return $menu;
     }
 
-    protected function getMenu($name){
+    protected function getMenu($name)
+    {
         return Menu::get($name);
     }
 
-    protected function menuCheck($menu){
+    protected function menuCheck($menu)
+    {
         return !is_null($menu);
     }
 

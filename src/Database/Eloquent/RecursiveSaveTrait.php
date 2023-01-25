@@ -5,10 +5,10 @@ namespace Nabre\Quickadmin\Database\Eloquent;
 trait RecursiveSaveTrait
 {
 
-    function readValue($name)
+    function readValue($name,$original=true)
     {
         $value = $this;
-        collect(explode(".", $name))->each(function ($v) use (&$value) {
+        collect(explode(".", $name))->each(function ($v) use (&$value,$original) {
             if (!is_null($value)) {
                 if (!is_null($rel = $this->relationshipFind($v))) {
                     $value = $value->$v;
@@ -22,7 +22,7 @@ trait RecursiveSaveTrait
                             $value = optional($value)->modelKeys();
                             break;
                     }
-                } elseif (in_array($v, $this->getFillable())) {
+                } elseif (in_array($v, $this->getFillable()) && $original) {
                     $value = $value->getRawOriginal($v);
                 } else {
                     $value = $value->$v;
@@ -70,7 +70,7 @@ trait RecursiveSaveTrait
     function recursiveSave(array $data, $syncBool = true, $saveQuietly = false)
     {
         $ability = data_get($this, $this->getKeyName(), false) === false ? 'create' : 'update';
-        $this->authorize($ability, $this);
+    //    $this->authorize($ability, $this);
 
         $relations = $this->definedRelations();
 

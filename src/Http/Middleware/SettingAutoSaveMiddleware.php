@@ -6,6 +6,7 @@ use Closure;
 
 class SettingAutoSaveMiddleware
 {
+    var $setting;
     /**
      * Create a new save settings middleware.
      */

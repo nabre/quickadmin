@@ -15,7 +15,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create()
     {
-        return view('Nabre-quickadmin::auth.forgot-password');
+        return view('nabre-quickadmin::auth.forgot-password');
     }
 
     /**
