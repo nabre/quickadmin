@@ -3,14 +3,15 @@
 namespace Nabre\Quickadmin\Providers;
 
 //use Livewire\LivewireServiceProvider as ServiceProvider;
+use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
-use Livewire;
 use Nabre\Quickadmin\Http\Livewire\FormManage;
+use Nabre\Quickadmin\Http\Livewire\ManageDatabaseCRUD;
 
 class LivewireServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Livewire::component('form',FormManage::class);
+        Livewire::component('manageDatabadeCRUD',ManageDatabaseCRUD::class);
     }
 }

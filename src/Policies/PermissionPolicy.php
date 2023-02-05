@@ -21,7 +21,7 @@ class PermissionPolicy
 
     public function view(User $user, Model $model)
     {
-        return true;
+        return false;
     }
 
     public function create(User $user)
@@ -35,6 +35,11 @@ class PermissionPolicy
     }
 
     public function delete(User $user,  Model $model)
+    {
+        return $model->destroy_enabled;
+    }
+
+    public function delete_force(User $user,  Model $model)
     {
         return true;
     }

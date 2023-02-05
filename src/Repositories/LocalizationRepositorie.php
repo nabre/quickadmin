@@ -1,14 +1,14 @@
 <?php
 
 namespace Nabre\Quickadmin\Repositories;
-use Config;
-use App;
-use Session;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class LocalizationRepositorie{
 
     function aviableLang(){
-        return collect(Config::get('app.available_locales'))->map(function($lang,$language){
+        return collect(Config::get('app.available_locales')??[])->map(function($lang,$language){
             switch($lang){
                 case "en":
                 $flagLang='gb';
@@ -21,6 +21,10 @@ class LocalizationRepositorie{
             $icon='<span class="fi fi-'.$flagLang.'"></span>';
             return (object) get_defined_vars() ;
         })->sortBy('language')->values();
+    }
+
+    function select(){
+        return $this->aviableLang()->pluck('language','lang')->toArray();
     }
 
     function boolLangMenu(){

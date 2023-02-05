@@ -1,26 +1,34 @@
 import _ from 'lodash';
 window._ = _;
 
+import '@popperjs/core';
 import 'bootstrap';
+
+window.$ = require('jquery');
+window.$ = window.jQuery = $;
+
+import 'jquery-ui/ui/widgets/datepicker.js';
+import 'jquery-ui/ui/widgets/sortable.js';
+
+//import 'livewire-sortable';
+
+/*
+import { createPopper } from '@popperjs/core';
+const popper= document.querySelector('[data-bs-toggle]');
+createPopper(popper);*/
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
 import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.$ = require('jquery');
-window.$ = window.jQuery = $;
 
-import 'livewire-sortable';
-
-import 'jquery-ui/ui/widgets/datepicker.js';
-import 'jquery-ui/ui/widgets/sortable.js';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

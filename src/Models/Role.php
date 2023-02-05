@@ -2,7 +2,9 @@
 
 namespace Nabre\Quickadmin\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Models\Role as Original;
 use Nabre\Quickadmin\Casts\LocalCast;
 use Nabre\Quickadmin\Database\Eloquent\RelationshipsTrait;
@@ -31,6 +33,10 @@ class Role extends Original
         'route_used' => 'boolean',
     ];
 
+    function user():BelongsToMany{
+        return $this->belongsToMany(User::class,null);
+    }
+
     function getEtiAttribute()
     {
         $ret = $this->priority;
@@ -38,12 +44,7 @@ class Role extends Original
         if (!is_null($ret)) {
             $ret .= '] ';
         }
-
-        if (empty($this->slug)) {
-            $ret .= $this->name;
-        } else {
-            $ret .= $this->slug;
-        }
+        $ret .= empty($this->slug)?$this->name:$this->slug;
 
         return $ret;
     }

@@ -13,9 +13,9 @@ class ImpersonateMiddleware
      */
     function handle(Request $request, Closure $next)
     {
-        if (!is_null(\Auth::user()) && $request->session()->has('impersonate')) {
+        if (impersonateCheck()) {
             $id = $request->session()->get('impersonate');
-            \Auth::onceUsingID($id);
+            auth()->onceUsingID($id);
         }
         return $next($request);
     }

@@ -2,8 +2,8 @@
 
 namespace Nabre\Quickadmin\Setting\Drivers;
 
-use Nabre\Setting\Contracts\Driver;
-use Nabre\Setting\Support\Arr;
+use Nabre\Quickadmin\Setting\Contracts\Driver;
+use Nabre\Quickadmin\Setting\Support\Arr;
 use Closure;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Arr as LaravelArr;

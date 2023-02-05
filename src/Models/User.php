@@ -37,7 +37,7 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
     ];
 
     protected $attributes = [
-        'disabled' => 0,
+        'disabled' => false,
     ];
 
     protected $hidden = [
@@ -48,11 +48,12 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
     protected $casts = [
         'name' => 'string',
         'disabled' => 'boolean',
+        'enabled' => 'boolean',
         'password' => PasswordCast::class,
     ];
 
     protected $dates = ['email_verified_at'];
-/*
+    /*
     function contact(): HasOne
     {
         return $this->hasOne(UserContact::class);
@@ -70,23 +71,43 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
 
     function getActiveAttribute()
     {
-        return !is_null($this->password) && !is_null($this->email_verified_at) && $this->enabled;
+        return !is_null($this->password) && $this->verified_email && $this->enabled;
     }
 
-    function getEtiAttribute(){
-        return $this->email;
-    }
-
-    function getShowStringAttribute()
+    function getVerifiedEmailAttribute()
     {
-        return $this->email;
+        return !is_null($this->email_verified_at);
+    }
+
+    function setEnabledAttribute($value)
+    {
+        $this->attributes['disabled'] = !$value;
+    }
+
+    function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst($value);
+    }
+
+    function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+
+    function getEnabledAttribute()
+    {
+        return !$this->disabled;
+    }
+
+    function getAccessibleAttribute()
+    {
+        return $this->enabled && $this->password && $this->email_verified_at;
     }
 
     #impersonate
     public function setImpersonating($id)
     {
         \Session::put('impersonate', $id);
-
         return $this;
     }
 

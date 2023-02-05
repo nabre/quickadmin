@@ -154,7 +154,6 @@ Il sistema di gestione prevede i seguenti ambienti di base con predefinte alcune
 | *user/*            | percorso dove si ritrova la gestione del proprio profilo dopo l'esecuzione del login. |
 | *manage/*          | Definite le pagine per la gestione delle funzionalità operative dell'applicazione.    |
 | *admin/*           | Pannello amministrativo dell'applicazione.                                            |
-| *admin/builder/*   | Pagine dedicate alla costruzione di alcune parti generali dell'applicazione.          |
 
 ## 3.2 Account
 L'account predefinito, dopo aver popolato per la prima volta il database (funzione artisan db:seed specifico), prevedere le seguenti credenziali:
@@ -184,29 +183,101 @@ php artisan roles:update
 Il comando `Route::resource()` è stato modificato nel seguente aggiungendo pagine da generare automaticamente.
 
 È stato implementato un sistema delle funzioni `only()` & `exept()`.
-## 3.5 Breadcrumbs
-L'applicazione genera i *breadcrumbs* basandosi sul percorso di chiamata impostato.
-Vengono riconosciute le pagine con suffisso **.index** come pagine generate dalla funzione `Route::resource()` e quindi nidifica conseguentemente i suffissi complementari della funzione resource; **.edit**, **.view**, **.create**.
-## 3.6 Menu
+
+## 3.5 Settings
+
+## 3.6 Form & List
+Per la manipolazione dei Model è presente la seguente classe da estendere per creare il modulo personalizzato.<br>
+Un esempio di come si presenta il form:
+```php
+
+<?php
+
+use ... as Model;
+use Nabre\Quickadmin\Repositories\Form\Form;
+
+class SimpleForm extends Form{
+     protected $model = Model::class;
+
+     function build()
+     {
+     }
+
+     function settings():array
+     {
+        return [];
+     }
+
+     function query($items)
+     {
+        return $items;
+     }
+
+     function submit($builder,$values):bool
+     {
+        return true;
+     }
+}
+
+```
+
+Per richiamare la compilazione del Form utilizzare:
+```php
+
+ SimpleForm::public(**id**);
+
+```
+
+### *function* settings
+| array key | type    | descrizione |
+| ---       | ---     | ---         |
+| id        |         | Come il parametro inseribile nella funzione statica *public*, è possibile inserire un istanza Model, oppure la stringa della chiave del Modello    |
+| idData    | ?string |  chiave del modello           |
+| view      | string  |  sono ammessi i valiri *list* e *form*, la prima per visualizzare l'elenco dei risultati mentre il secondo per accedere al form di modifica           |
+| back      |   bool  |  con l'attribuzione *false* l'applicazione prevede di utilizzare esclusivamente il Form, senza permettere di visualizzare la lista.          |
+| crud      |   bool  |  Nella visualizzazione *list* vengono tolti tutti gli elementi di comando crea,modifica, elimina,...          |
+| trashsoft |   bool  |  Qualora il modello prevede il **softDelete**, serve per visualizzare le istanze nel cestino.           |
+| onlyRead  |   bool  |  Visualizza esclusivamente le informazioni senza la possibilità di modificare i contenuti           |
+
+### *function* query
+È possibile filtrare i risultati maniplando il collect()
+
+### *function* submit
+| parametro | type    | descrizione |
+| ---       | ---               | ---         |
+| $builder  | instanceof Form    |             |
+| $values  | array    |             |
+
+*return*
+| bool |  descrizione |
+| ---       | ---               |
+| true  | qualora si vuole proseguire con il salvataggio predefinito            |
+| false | qualora si vuole proseguire senza eseguire il salvataggio predefinito |
+
+### *function* build
+È la funzione dove inserire i campi del form.
 
 
-## 3.7 Form
-### 3.7.1 Impostazioni base
-### 3.7.2 Tipi di input
-### 3.7.3 Request
-### 3.7.4 Relazioni; EmbedsOne & EmbedsMany
-## 3.8 Table
-### 3.8.1 Impostazioni base
-### 3.8.2 Policy
-### 3.8.3 Colonne personalizzate
-## 3.9 Template
+### 3.6.1 Compilare la funzione **build**
+```php
+
+ $->add($variable,$output);
+
+```
+| variabile |  descrizione |
+| ---       | ---               |
+| $variable  | Nome della variabile con cui viene definito il valore. Questo nome si collega al MOdel definito  |
+| $output | Si imposta il tipo di interfaccia da utilizzare per manipolare il valore **Field::class** |
+
+
 
 # 4 Artisan
 Il presente pacchetto prevede alcuni comandi artisan aggiuntivi per facilitare alcune oprazioni di gestione dell'applicazione.
 
-| Comando           | Descrizione                                                       |
-| -------------     | -------------                                                     |
-| mongodb:dump      | Crea un fil di backup del database MongoDB impostato.             |
-| mongodb:restore   | Ripristina l'ultimo file di backup presente nel DB MongoDB        |
-| page:install      | Vengono aggiunte le pagine presenti nell'applicazione.            |
-| roles:update      | Aggiorna ruoli e permessi utilizzati nel middleware delle route   |
+| Comando           	| Descrizione                                                       	|
+| -------------     	| -------------                                                     	|
+| mongodb:dump      | Crea un fil di backup del database MongoDB impostato.             	    |
+| mongodb:restore       | Ripristina l'ultimo file di backup presente nel DB MongoDB        	|
+| roles:update      	| Aggiorna ruoli e permessi utilizzati nel middleware delle route   	|
+
+

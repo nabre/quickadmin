@@ -15,6 +15,8 @@ class PermissionCommand extends Command
 
     public function handle()
     {
+        Artisan::call('optimize');
+
         Role::where('route_used',true)->update(['route_used'=>false]);
         Permission::where('route_used',true)->update(['route_used'=>false]);
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class ResourceRegistrar extends OriginalRegistrar
 {
-    protected $resourceDefaults = ['index', 'create', 'store', 'copy', 'show', 'edit', 'update', 'destroy','reset','position' /*,'pdf'*/];
+    protected $resourceDefaults = ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy','livewire' /*,'pdf'*/];
 
     function getResourceDefault(){
         return $this->resourceDefaults;
@@ -16,8 +16,9 @@ class ResourceRegistrar extends OriginalRegistrar
 
     protected function getResourceMethods($defaults, $options)
     {
-        $methods = parent::{__FUNCTION__}( $defaults, $options );
+        $methods = collect(parent::{__FUNCTION__}( $defaults, $options ));
 
+/*
         if(in_array('edit',$methods)){
             $methods[]='update';
         }
@@ -25,13 +26,16 @@ class ResourceRegistrar extends OriginalRegistrar
         if(in_array('create',$methods)){
             $methods[]='store';
         }
-
-
+*/
         if (isset($options['except'])) {
-            $methods = array_diff(array_unique($methods), (array) $options['except']);
+            $methods=$methods->reject(fn($m)=>in_array($m,$options['except']));
         }
 
-        return array_values(array_intersect($defaults,$methods));
+        if($methods->filter(fn($m)=>$m=='livewire')->count()){
+            $methods=$methods->reject(fn($m)=>$m=='index');
+        }
+
+        return array_values(array_intersect($defaults,$methods->unique()->toArray()));
     }
 
     public function register($name, $controller, array $options = [])
@@ -80,27 +84,11 @@ class ResourceRegistrar extends OriginalRegistrar
      * @param  array   $options
      * @return \Illuminate\Routing\Route
      */
-    protected function addResourceCopy($name, $base, $controller, $options)
+    protected function addResourceLivewire($name, $base, $controller, $options)
     {
         $name = $this->getShallowName($name, $options);
-        $uri = $this->getResourceUri($name).'/{'.$base.'}/copy';
-        $action = $this->getResourceAction($name, $controller, 'copy', $options);
-        return $this->router->match(array('COPY', 'PATCH'),$uri, $action);
-    }
-
-    protected function addResourceReset($name, $base, $controller, $options)
-    {
-        $name = $this->getShallowName($name, $options);
-        $uri = $this->getResourceUri($name).'/{'.$base.'}/reset';
-        $action = $this->getResourceAction($name, $controller, 'reset', $options);
-        return $this->router->match(array('PUT', 'PATCH'),$uri, $action);
-    }
-
-    protected function addResourcePosition($name, $base, $controller, $options)
-    {
-        $name = $this->getShallowName($name, $options);
-        $uri = $this->getResourceUri($name).'/position';
-        $action = $this->getResourceAction($name, $controller, 'position', $options);
-        return $this->router->match(['POST'],$uri, $action);
+        $uri = $this->getResourceUri($name).'/{'.$base.'?}';
+        $action = $this->getResourceAction($name, $controller, 'index', $options);
+        return $this->router->match(array('GET'),$uri, $action);
     }
 }

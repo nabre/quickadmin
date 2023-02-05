@@ -18,14 +18,17 @@ class Permission extends Original
     protected $fillable = [
         'name',
         'slug',
+        'route_used',
         'guard_name',
     ];
     protected $attributes = [
         'guard_name' => 'web',
+        'route_used' => false,
     ];
 
     protected $casts=[
         'slug'=> LocalCast::class,
+        'route_used' => 'boolean',
     ];
 
 
@@ -56,5 +59,14 @@ class Permission extends Original
         }
 
         return $permission;
+    }
+
+    function getDestroyEnabledAttribute()
+    {
+        $count = 0;
+        $this->definedRelations()->pluck('name')->each(function ($name) use (&$count) {
+            $count += $this->$name()->get()->count();
+        });
+        return !$this->route_used && !$count;
     }
 }

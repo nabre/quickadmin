@@ -2,7 +2,7 @@
 
 namespace Nabre\Quickadmin\Setting\Drivers;
 
-use Nabre\Setting\Contracts\Driver;
+use Nabre\Quickadmin\Setting\Contracts\Driver;
 
 class Memory extends Driver
 {

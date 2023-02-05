@@ -11,6 +11,10 @@ return [
             [
                 'index' => 'fa-solid fa-gauge'
             ],
+            'settings' =>
+            [
+                'index' => 'fa-solid fa-sliders'
+            ],
             "users" => [
                 'rdr' => 'fa-solid fa-users',
                 "list" => [
@@ -22,6 +26,9 @@ return [
                 'permissions' => [
                     'index' => 'fa-solid fa-shield-halved'
                 ],
+                'impersonate' => [
+                    'index' => 'fa-solid fa-people-arrows'
+                ],
             ],
         ],
         'manage' =>
@@ -30,7 +37,7 @@ return [
             'dashboard' =>
             [
                 'index' => 'fa-solid fa-gauge'
-            ]
+            ],
         ],
         'user' =>
         [
@@ -38,7 +45,29 @@ return [
             'dashboard' =>
             [
                 'index' => 'fa-solid fa-gauge'
-            ]
-        ]
+            ],
+            'account' => [
+                'index' => 'fa-solid fa-key',
+            ],
+            'profile' => [
+                'index' => 'fa-regular fa-address-card',
+            ],
+            'settings' => [
+                'index' => 'fa-solid fa-sliders',
+            ],
+        ],
+        'builder' => [
+            'rdr' => 'fa-solid fa-tower-observation',
+            'settings' => [
+                'rdr' => 'fa-solid fa-sliders',
+                'list' =>
+                [
+                    'index' => 'fa-solid fa-table-list',
+                ],
+                'type' => [
+                    'index' => 'fa-solid fa-hashtag',
+                ],
+            ],
+        ],
     ]
 ];

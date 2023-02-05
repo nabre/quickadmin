@@ -11,5 +11,9 @@ $(document).ready(function () {
         $(this).closest('.toggle-content').find('> *').toggle();
     });
 
-    $('.ckeditor').ckeditor();
+  //  $('.ckeditor').ckeditor();
+
+    $('[data-bs-toggle="popover"]').popover();
+
+    $('[data-bs-toggle="tooltip"]').tooltip();
 });

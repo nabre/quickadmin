@@ -7,7 +7,10 @@ use Collective\Html\FormFacade as Form;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Blade;
+use Nabre\Quickadmin\Repositories\Form\Field;
+use Nabre\Quickadmin\Repositories\Form\FormConst;
+use Nabre\Quickadmin\View\Components\Boolean;
 
 class MacroServiceProvider extends ServiceProvider
 {
@@ -153,5 +156,7 @@ class MacroServiceProvider extends ServiceProvider
             $span = Html::tag('span', $icon, ['class' => "btn btn-outline-dark toggle-password"]);
             return Html::div($input . $span, ['class' => 'input-group']);
         });
+
+        Blade::component(Boolean::class,'boolean');
     }
 }

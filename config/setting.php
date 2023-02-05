@@ -90,7 +90,7 @@ return [
         'mail.mailers.smtp.password' => 'mail_password',
         'mail.from.address' => 'mail_from_address',
         'mail.from.name' => 'mail_from_name',
-        'setting.define.autousergenerate' => 'setting_define_autousergenerate',
+        'setting.define.autousergenerate' => 'setting_autousergenerate',
     ],
 
     'define' => [
