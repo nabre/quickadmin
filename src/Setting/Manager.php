@@ -2,9 +2,9 @@
 
 namespace Nabre\Quickadmin\Setting;
 
-use Nabre\Setting\Drivers\Database;
-use Nabre\Setting\Drivers\Json;
-use Nabre\Setting\Drivers\Memory;
+use Nabre\Quickadmin\Setting\Drivers\Database;
+use Nabre\Quickadmin\Setting\Drivers\Json;
+use Nabre\Quickadmin\Setting\Drivers\Memory;
 use Illuminate\Support\Manager as BaseManager;
 use Illuminate\Support\Facades\Auth;
 use Nabre\Resolvers\UserResolver;

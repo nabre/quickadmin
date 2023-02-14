@@ -21,10 +21,15 @@ class RolePolicy
 
     public function view(User $user, Model $model)
     {
-        return true;
+        return false;
     }
 
     public function create(User $user)
+    {
+        return true;
+    }
+
+    public function refresh(User $user)
     {
         return true;
     }
@@ -37,5 +42,10 @@ class RolePolicy
     public function delete(User $user,  Model $model)
     {
         return $model->destroy_enabled;
+    }
+
+    public function delete_force(User $user,  Model $model)
+    {
+        return true;
     }
 }

@@ -2,25 +2,42 @@
 
 namespace Nabre\Quickadmin\Providers;
 
+use Lavary\Menu\Item as LavaryItem;
 use Lavary\Menu\Menu as LavaryMenu;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Nabre\Quickadmin\Setting\Manager;
 use Illuminate\Support\ServiceProvider;
-use Nabre\Quickadmin\Repositories\Menu;
+use Lavary\Menu\Builder as LavaryBuilder;
+use Nabre\Quickadmin\Repositories\Menu\Menu;
+use Illuminate\Session\Middleware\StartSession;
 use Nabre\Quickadmin\View\Components\AppLayout;
 use Nabre\Quickadmin\View\Components\GuestLayout;
 use Nabre\Quickadmin\Http\Middleware\GenerateMenu;
 use Nabre\Quickadmin\Setting\Facade as SettingFacade;
 use App\Http\Middleware\GenerateMenu as AppGenerateMenu;
+use Nabre\Quickadmin\Console\Commands\OptimizeCommand;
+use Nabre\Quickadmin\Repositories\Menu\Item as MenuItem;
+use Nabre\Quickadmin\Console\Commands\Sync\SettingCommand;
 use Nabre\Quickadmin\Repositories\LocalizationRepositorie;
+use Nabre\Quickadmin\Http\Middleware\EnsureEmailIsVerified;
+use Nabre\Quickadmin\Http\Middleware\ImpersonateMiddleware;
+use Nabre\Quickadmin\Repositories\Menu\Builder as MenuBuilder;
+use Nabre\Quickadmin\Console\Commands\Update\PermissionCommand;
 use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
+use Nabre\Quickadmin\Http\Middleware\SettingOverrideMiddleware;
+use Nabre\Quickadmin\Console\Commands\Sync\FormFieldTypeCommand;
+use Nabre\Quickadmin\Http\Middleware\PagesEnable\AccountEnableMiddleware;
+use Nabre\Quickadmin\Http\Middleware\PagesEnable\ProfileEnableMiddleware;
+use Nabre\Quickadmin\Http\Middleware\PagesEnable\SettingEnableMiddleware;
+use Nabre\Quickadmin\Http\Middleware\RegisterPageMiddleware;
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
         \Illuminate\Routing\ResourceRegistrar::class => \Nabre\Quickadmin\Routing\ResourceRegistrar::class,
         LavaryMenu::class => Menu::class,
+        LavaryBuilder::class => MenuBuilder::class,
     ];
 
     function register()
@@ -34,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(MacroServiceProvider::class);
         $this->app->register(ViewsServiceProvider::class);
         $this->app->register(LivewireServiceProvider::class);
+        $this->app->register(ObserverServiceProvider::class);
         $this->app->register(\Collective\Html\HtmlServiceProvider::class);
 
         /**
@@ -48,13 +66,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         /**
-         * Bindings
-         */
-        $this->app->singleton(LocalizationRepositorie::class, function ($app) {
-            return new LocalizationRepositorie;
-        });
-
-        /**
          * Connfig
          */
         $this->mergeConfigFrom(__DIR__ . '/../../config/setting.php', 'setting');
@@ -62,9 +73,17 @@ class AppServiceProvider extends ServiceProvider
 
     function boot(\Illuminate\Routing\Router $router, \Illuminate\Contracts\Http\Kernel $kernel)
     {
+        $kernel->pushMiddleware(StartSession::class);
+        $kernel->pushMiddleware(ImpersonateMiddleware::class);
+        $kernel->pushMiddleware(SettingOverrideMiddleware::class);
         $router->pushMiddlewareToGroup('web', GenerateMenu::class);
         $router->aliasMiddleware('role', \Maklad\Permission\Middlewares\RoleMiddleware::class);
         $router->aliasMiddleware('permission', \Maklad\Permission\Middlewares\PermissionMiddleware::class);
+        $router->aliasMiddleware('user-account', AccountEnableMiddleware::class);
+        $router->aliasMiddleware('user-profile', ProfileEnableMiddleware::class);
+        $router->aliasMiddleware('settings-define', SettingEnableMiddleware::class);
+        $router->aliasMiddleware('registration', RegisterPageMiddleware::class);
+
         /**
          *  Config
          */
@@ -73,10 +92,11 @@ class AppServiceProvider extends ServiceProvider
         ], 'nabre-quickadmin');
         $this->mergeConfigFrom(__DIR__ . '/../../config/routeicons.php', 'routeicons');
 
-        $this->loadViewComponentsAs('',[
+        $this->loadViewComponentsAs('', [
             AppLayout::class,
             GuestLayout::class,
         ]);
+
         /**
          * Bindings
          */
@@ -84,7 +104,25 @@ class AppServiceProvider extends ServiceProvider
             return class_exists(AppGenerateMenu::class) ? new AppGenerateMenu : new GenerateMenu;
         });
 
+        $this->app->singleton(\Illuminate\Auth\Middleware\EnsureEmailIsVerified::class, function ($app) {
+            return new EnsureEmailIsVerified($app);
+        });
 
+        $this->app->singleton(LocalizationRepositorie::class, function ($app) {
+            return new LocalizationRepositorie;
+        });
+
+        /**
+         * Commands
+         */
+        //       if ($this->app->runningInConsole()) {
+        $this->commands([
+            PermissionCommand::class,
+            SettingCommand::class,
+            FormFieldTypeCommand::class,
+            OptimizeCommand::class,
+        ]);
+        //    }
 
         /**
          * Translation
@@ -93,6 +131,7 @@ class AppServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../lang' => $this->app->langPath('vendor/nabre-quickadmin'),
         ], 'nabre-quickadmin');
+
         /**
          * Setting
          */

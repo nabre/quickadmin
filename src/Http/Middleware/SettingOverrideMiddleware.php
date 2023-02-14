@@ -5,7 +5,6 @@ namespace Nabre\Quickadmin\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Exception;
-use Nabre\Repositories\Pages;
 use Illuminate\Support\Arr;
 
 class SettingOverrideMiddleware

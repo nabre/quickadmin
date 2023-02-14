@@ -2,7 +2,7 @@
 
 namespace Nabre\Quickadmin\Setting\Contracts;
 
-use Nabre\Setting\Support\Arr;
+use Nabre\Quickadmin\Setting\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 abstract class Driver

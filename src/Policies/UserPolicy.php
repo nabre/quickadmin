@@ -21,7 +21,7 @@ class UserPolicy
 
     public function view(User $user, Model $model)
     {
-        return true;
+        return false;
     }
 
     public function create(User $user)
@@ -36,6 +36,18 @@ class UserPolicy
 
     public function delete(User $user,  Model $model)
     {
-        return $user->{$user->getKeyName()} != $model->{$model->getKeyName()} && ($user->lvl_role <= $model->lvl_role || (is_null($model->lvl_role) && !is_null($user->lvl_role)));
+        return $user->{$user->getKeyName()} != $model->{$model->getKeyName()}
+         && ($user->lvl_role <= $model->lvl_role || (is_null($model->lvl_role) && !is_null($user->lvl_role)))
+         && !(config('setting.define.autousergenerate') && $model->contact);
+    }
+
+    public function delete_force(User $user,  Model $model)
+    {
+        return true;
+    }
+
+    public function restore(User $user,  Model $model)
+    {
+        return true;
     }
 }

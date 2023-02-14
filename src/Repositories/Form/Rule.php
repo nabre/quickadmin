@@ -363,8 +363,8 @@ class Rule
         return __FUNCTION__;
     }
 
-    static function unique(string $table,?string $column=null,?string $exclude=null)
+    static function unique(string $table,?string $column=null,?string $value=null,?string $key=null)
     {
-        return __FUNCTION__;
+        return ValidationeRule::unique($table,$column)->ignore($value,$key)->__toString();
     }
 }

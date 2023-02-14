@@ -2,13 +2,13 @@
 
 namespace Nabre\Quickadmin\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\Concerns\HasEvents;
+use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Eloquent\Model as JModel;
+use Illuminate\Database\Eloquent\Concerns\HasEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 //use Jenssegers\Mongodb\Eloquent\HybridRelations; #Per relazioni ibride tra SQL & MONGO
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Nabre\Quickadmin\Database\Eloquent\RelationshipsTrait;
-
 
 class Model extends JModel
 {
@@ -25,7 +25,9 @@ class Model extends JModel
 
     function delete()
     {
-        $this->authorize('delete', $this);
+       // $this->authorize('delete', $this);
         return parent::delete();
     }
+
+
 }

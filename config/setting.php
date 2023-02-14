@@ -1,5 +1,7 @@
 <?php
 
+use Nabre\Quickadmin\Repositories\Form\Field;
+
 return [
 
     /*
@@ -83,18 +85,36 @@ return [
         'app.locale' => 'app_locale',
         'app.name' => 'app_name',
         'app.debug' => 'app_debug',
-        'mail.mailers.smtp.host' => 'mail_host',
-        'mail.mailers.smtp.port' => 'mail_port',
-        'mail.mailers.smtp.encryption' => 'mail_encryption',
-        'mail.mailers.smtp.username' => 'mail_username',
-        'mail.mailers.smtp.password' => 'mail_password',
-        'mail.from.address' => 'mail_from_address',
-        'mail.from.name' => 'mail_from_name',
-        'setting.define.autousergenerate' => 'setting_define_autousergenerate',
+        'setting.define.autousergenerate' => 'setting_autousergenerate',
+        'setting.define.register-form' => 'register_form',
     ],
 
     'define' => [
         'autousergenerate' => false,
+        'setting.define.register-form' => false,
+    ],
+
+    'type' => [
+        'app_locale' => [
+            'type' => Field::LANG_SELECT,
+            'role' => 1,
+        ],
+        'app_name' => [
+            'type' => Field::TEXT_LANG,
+            'role' => 1,
+        ],
+        'app_debug' => [
+            'type' => Field::BOOLEAN,
+            'role' => 0,
+        ],
+        'register_form' => [
+            'type' => Field::BOOLEAN,
+            'role' => 0,
+        ],
+        'setting_autousergenerate' => [
+            'type' => Field::BOOLEAN,
+            'role' => 0,
+        ],
     ],
 
     /*

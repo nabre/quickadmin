@@ -62,10 +62,11 @@ trait RelationshipsTrait
     {
         return $this->definedRelations()->where('name', $name)->first();
     }
-
+/*
     public function attributesList()
     {
         $model = new static;
+
         return collect((new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC))->pluck('name')->filter(function ($name) {
             $posGet = strpos($name, 'get');
             $posAtt = strpos($name, 'Attribute');
@@ -73,5 +74,41 @@ trait RelationshipsTrait
         })->map(function ($name) {
             return Str::snake(substr($name, 3, -9));
         })->sort()->values()->toArray();
+    }
+
+    public function setAttributesList(){
+        $model = new static;
+
+        return collect((new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC))->pluck('name')->filter(function ($name) {
+            $posGet = strpos($name, 'set');
+            $posAtt = strpos($name, 'Attribute');
+            return $posGet !== false && $posGet == 0 && $posAtt !== false && $posAtt == (strlen($name) - 9)  && strlen($name) > (3 + 9);
+        })->map(function ($name) {
+            return Str::snake(substr($name, 3, -9));
+        })->sort()->values()->toArray();
+    }*/
+
+    function getFillable()
+    {
+        return collect(get_class_methods($this))
+            ->filter(fn ($method) => str_ends_with($method, 'Attribute'))
+            ->filter(fn ($method) => str_starts_with($method, 'set'))
+            ->reject(fn ($method) => $method == 'setAttribute')
+            ->reject(fn ($method) => str_ends_with($method, 'CastableAttribute'))
+            ->map(fn ($method) => Str::snake(substr($method, 3, -9)))
+            ->merge(parent::getFillable())
+            ->sort()->values()->toArray();
+    }
+
+    function getAttributesArray()
+    {
+        return collect(get_class_methods($this))
+            ->filter(fn ($method) => str_ends_with($method, 'Attribute'))
+            ->filter(fn ($method) => str_starts_with($method, 'get'))
+            ->reject(fn ($method) => $method == 'getAttribute')
+            ->map(fn ($method) => Str::snake(substr($method, 3, -9)))
+         //   ->merge(parent::getAttributes())->dd()
+            ->reject(fn($name)=>in_array($name,$this->getFillable()))
+            ->sort()->values()->toArray();
     }
 }

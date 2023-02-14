@@ -68,4 +68,11 @@ class QueryElements
         })->values();
         return $this;
     }
+
+    function viewMode(){
+        $this->elements = $this->elements->reject(function ($i) {
+            return in_array(data_get($i,'output'),[Field::STATIC,Field::MSG,Field::HTML,Field::HIDDEN]);
+        })->values();
+        return $this;
+    }
 }

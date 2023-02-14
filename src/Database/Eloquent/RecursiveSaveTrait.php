@@ -5,24 +5,24 @@ namespace Nabre\Quickadmin\Database\Eloquent;
 trait RecursiveSaveTrait
 {
 
-    function readValue($name,$original=true)
+    function readValue($name, $original = true)
     {
         $value = $this;
-        collect(explode(".", $name))->each(function ($v) use (&$value,$original) {
+        collect(explode(".", $name))->each(function ($v) use (&$value, $original) {
             if (!is_null($value)) {
                 if (!is_null($rel = $this->relationshipFind($v))) {
                     $value = $value->$v;
                     switch ($rel->type) {
                         case "BelongsTo":
                         case "HasOne":
-                            $value = optional($value)->id;
+                            $value = optional($value)->{$this->getKeyName()};
                             break;
                         case "HasMany":
                         case "BelongsToMany":
                             $value = optional($value)->modelKeys();
                             break;
                     }
-                } elseif (in_array($v, $this->getFillable()) && $original) {
+                } elseif (in_array($v, parent::getFillable()) && $original) {
                     $value = $value->getRawOriginal($v);
                 } else {
                     $value = $value->$v;
@@ -31,23 +31,6 @@ trait RecursiveSaveTrait
         });
 
         return $value;
-    }
-
-    function toArray($attributes = false)
-    {
-        $names = collect($this->getFillable())
-            ->merge($this->definedRelations()->pluck('name'))
-            ->push($this->getKeyName());
-
-        if ($attributes) {
-            $names = $names->merge($this->attributesList());
-        }
-
-        return $names->unique()
-            ->map(function ($name) {
-                $value = $this->readValue($name);
-                return get_defined_vars();
-            })->pluck('value', 'name')->toArray();
     }
 
     function recursiveSaveQuietly(array $data, $syncBool = true)
@@ -69,17 +52,20 @@ trait RecursiveSaveTrait
 
     function recursiveSave(array $data, $syncBool = true, $saveQuietly = false)
     {
-        $ability = data_get($this, $this->getKeyName(), false) === false ? 'create' : 'update';
-    //    $this->authorize($ability, $this);
+        $element = $this;
+        if (!is_null($id = data_get($data, $this->getKeyName())) && $id != data_get($element, $this->getKeyName(), 0)) {
+            $element = self::find($id) ?? self::make();
+        }
 
-        $relations = $this->definedRelations();
+        $relations = $element->definedRelations();
+        $element->fillable = collect($element->getFillable())->merge($element->fillable)->unique()->sort()->toArray();
 
         $dataFill = collect($data)
             ->reject(fn ($v, $k) => in_array($k, $relations->pluck('name')->toArray()))
-            ->reject(fn ($v, $k) => in_array($k, $this->attributesList()))
-            ->map(function ($val, $key) {
-                $type = data_get($this->casts, $key);
-                switch ($type) {
+            ->reject(fn ($v, $k) => in_array($k, $this->getAttributesArray()))
+            ->map(function ($val, $key) use ($element) {
+                $cast = data_get($element->casts, $key);
+                switch ($cast) {
                     case "array":
                         $val = array_values(array_filter((array)$val, 'strlen'));
                         break;
@@ -99,33 +85,34 @@ trait RecursiveSaveTrait
                 return $val;
             })->toArray();
 
-        $this->fill($dataFill);
+        $element->fill($dataFill);
 
         $relItems = $relations->whereIn('name', array_keys($data));
         if ($relItems->count()) {
-            $this->makeSave(is_null(data_get($this, $this->getKeyName())) ? false : $saveQuietly);
+            $element->makeSave(is_null(data_get($element, $element->getKeyName())) ? false : $saveQuietly);
         }
 
         $relItems->map(fn ($i) => data_set($i, 'value', data_get($data, data_get($i, 'name'))))
-            ->each(function ($rel) use ($syncBool, $saveQuietly) {
+            ->each(function ($rel) use ($syncBool, $saveQuietly, $element) {
                 $name = data_get($rel, 'name');
                 $type = data_get($rel, 'type');
                 $model = data_get($rel, 'model');
                 $collection = new $model;
                 $data = data_get($rel, 'value');
 
-                $cont = $this->$name();
+                $cont = $element->$name();
 
                 switch ($type) {
                     case 'BelongsTo':
                     case 'HasOne':
-                        $ids = $this->nestedSave($model, $data, $syncBool, $saveQuietly);
+                        $ids = $element->nestedSave($model, $data, $syncBool, $saveQuietly);
                         break;
                     case 'BelongsToMany':
                     case 'HasMany':
+
                         $ids = collect((array)$data)
-                            ->map(function ($d) use ($model, $syncBool, $saveQuietly) {
-                                return $this->nestedSave($model, $d, $syncBool, $saveQuietly);
+                            ->map(function ($d) use ($model, $syncBool, $saveQuietly, $element) {
+                                return $element->nestedSave($model, $d, $syncBool, $saveQuietly);
                             })
                             ->toArray();
                         break;
@@ -156,6 +143,7 @@ trait RecursiveSaveTrait
                         }
                         break;
                     case 'HasMany':
+                        $cont = $cont->whereNotIn($collection->getKeyName(), (array) $ids);
                         $fk = data_get($rel, 'foreignKey');
                         foreach ($cont->get() as $a) {
                             $a->unset($fk);
@@ -190,17 +178,17 @@ trait RecursiveSaveTrait
                 }
             });
 
-        $this->makeSave($saveQuietly);
+        $element->makeSave($saveQuietly);
 
-        return $this;
+        return $element;
     }
 
     function makeSave($saveQuietly)
     {
         if ($saveQuietly) {
-            $this->saveQuietly();
+            parent::saveQuietly();
         } else {
-            $this->save();
+            parent::save();
         }
     }
 
