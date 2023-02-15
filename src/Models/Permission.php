@@ -2,7 +2,10 @@
 
 namespace Nabre\Quickadmin\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasEvents;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
+use Jenssegers\Mongodb\Relations\HasMany;
 use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Models\Permission as Original;
 use Nabre\Quickadmin\Casts\LocalCast;
@@ -26,11 +29,26 @@ class Permission extends Original
         'route_used' => false,
     ];
 
+<<<<<<< HEAD
     protected $casts=[
         'slug'=> LocalCast::class,
+=======
+    protected $casts = [
+        'slug' => LocalCast::class,
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         'route_used' => 'boolean',
     ];
 
+
+    function contact(): HasMany
+    {
+        return $this->hasMany(Contact::class);
+    }
+
+    function user(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, null);
+    }
 
     function getEtiAttribute()
     {
@@ -38,11 +56,6 @@ class Permission extends Original
             return $this->name;
         }
         return $this->slug;
-    }
-
-    function getShowStringAttribute()
-    {
-        return $this->name;
     }
 
     public static function findByName(string $name, string $guardName = null): PermissionInterface

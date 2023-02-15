@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 
 namespace Nabre\Quickadmin\Forms\Manage;
 
@@ -16,3 +17,17 @@ class SettingsForm extends AdminSettingsForm
         })->values();
     }
 }
+=======
+namespace Nabre\Quickadmin\Forms\Manage;
+
+use Nabre\Quickadmin\Forms\SettingsBackForm;
+
+class SettingsForm extends SettingsBackForm{
+
+    function rolePage()
+    {
+        return 'manage';
+    }
+}
+
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870

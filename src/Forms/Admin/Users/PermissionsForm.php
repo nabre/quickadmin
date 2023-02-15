@@ -12,6 +12,10 @@ class PermissionsForm extends Form
     function build()
     {
         $this->add('eti')->onlyList();
+<<<<<<< HEAD
+=======
+        $this->add('route_used')->onlyList();
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         $this->add('name');
         $this->add('slug')->onlyForm();
     }

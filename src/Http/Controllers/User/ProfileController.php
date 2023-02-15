@@ -1,14 +1,8 @@
 <?php
-
 namespace Nabre\Quickadmin\Http\Controllers\User;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use Nabre\Quickadmin\Http\Controllers\Controller;
+<<<<<<< HEAD
 
 class ProfileController extends Controller
 {
@@ -39,4 +33,12 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }*/
+=======
+use Nabre\Quickadmin\Forms\User\ProfileForm as Form;
+class ProfileController extends Controller{
+    function index(){
+        $CONTENT = Form::public();
+        return view('nabre-quickadmin::quick.user', get_defined_vars());
+    }
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 }

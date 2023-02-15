@@ -2,10 +2,15 @@
 
 namespace Nabre\Quickadmin\Forms\User;
 
+<<<<<<< HEAD
+=======
+use Nabre\Quickadmin\Forms\SettingsBackForm;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 use Nabre\Quickadmin\Models\Setting as Model;
 use Nabre\Quickadmin\Repositories\Form\Field;
 use Nabre\Quickadmin\Repositories\Form\Form;
 
+<<<<<<< HEAD
 class SettingsForm extends Form
 {
     protected $model = Model::class;
@@ -53,4 +58,8 @@ class SettingsForm extends Form
     {
         return ['view' => 'form-list', 'head' => false];
     }
+=======
+class SettingsForm extends SettingsBackForm
+{
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 }

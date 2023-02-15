@@ -2,7 +2,7 @@
 
 namespace Nabre\Quickadmin\Models;
 
-use App\Models\UserContact;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\HasOne;
 use Nabre\Quickadmin\Casts\PasswordCast;
@@ -53,16 +53,20 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
     ];
 
     protected $dates = ['email_verified_at'];
+<<<<<<< HEAD
     /*
+=======
+
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     function contact(): HasOne
     {
-        return $this->hasOne(UserContact::class);
+        return $this->hasOne(Contact::class,'account_id');
     }
 
     function settings(): HasMany
     {
         return $this->hasMany(Setting::class);
-    }*/
+    }
 
     function getLvlRoleAttribute()
     {
@@ -102,24 +106,36 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
     function getAccessibleAttribute()
     {
         return $this->enabled && $this->password && $this->email_verified_at;
+<<<<<<< HEAD
+=======
+    }
+
+    function getLocaleAttribute()
+    {
+        return data_get($this->settings()->where(config('setting.database.key'), 'app_locale')->first(), config('setting.database.value'));
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     }
 
     #impersonate
     public function setImpersonating($id)
     {
+<<<<<<< HEAD
         \Session::put('impersonate', $id);
+=======
+        Session::put('impersonate', $id);
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         return $this;
     }
 
     public function stopImpersonating()
     {
-        \Session::forget('impersonate');
+        Session::forget('impersonate');
 
         return $this;
     }
 
     public function isImpersonating()
     {
-        return \Session::has('impersonate');
+        return Session::has('impersonate');
     }
 }

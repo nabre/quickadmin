@@ -30,8 +30,14 @@ return [
         ],
         'manage' => [
             'rdr' => 'Gestione',
+            'contacts' => [
+                'index' => 'Contatti',
+            ],
             'dashboard' => [
                 'index' => 'Dashboard',
+            ],
+            'settings' => [
+                'index' => 'Impostazioni',
             ],
         ],
         'user' => [
@@ -51,8 +57,17 @@ return [
         ],
         'builder' => [
             'rdr' => 'Costruttore',
+<<<<<<< HEAD
             'settings' => [
                 'rdr' => 'Impostazioni',
+=======
+            'dashboard' => [
+                'index' => 'Dashboard',
+            ],
+            'settings' => [
+                'index' => 'Impostazioni',
+                'rdr' => 'Definisci impostazioni',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 'list' =>
                 [
                     'index' => 'Elenco impostazioni',
@@ -65,6 +80,10 @@ return [
     ],
     'login' => 'Accesso',
     'logout' => 'Disconnetti',
-    'password' => ['request' => 'Password dimenticata'],
+    'password' => [
+        'request' => 'Password dimenticata',
+        'reset' => 'Rinnova password',
+    ],
+    'register'=>'Registrazione',
     'welcome' => 'Home',
 ];

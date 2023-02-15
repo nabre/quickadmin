@@ -37,7 +37,7 @@ class Field
     //    const TIME = 'time';
     //    const WEEK = 'week';
     //Special Purpose fields
-    const ADDRESS = 'address';
+   // const ADDRESS = 'address';
     const LIVEWIRE = 'livewire';
     //const COLOR = 'color';
     //const SEARCH = 'search'; //
@@ -159,7 +159,12 @@ class Field
                 $this->multiple();
             case self::SELECT:
                 $this->addClass("form-select");
+<<<<<<< HEAD
                 return Form::select('', $list['items'], null, $this->options()) . $errorHtml;
+=======
+            //    dd($this,get_defined_vars());
+                return Form::select('', $list['items'], '', $this->options()) . $errorHtml;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 break;
                 ###
             case self::LANG_SELECT:

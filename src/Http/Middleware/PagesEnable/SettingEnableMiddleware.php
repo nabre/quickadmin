@@ -1,17 +1,18 @@
 <?php
 
-namespace Nabre\Quickadmin\Http\Middleware;
+namespace Nabre\Quickadmin\Http\Middleware\PagesEnable;
 
 use Closure;
 use Illuminate\Http\Request;
 use Exception;
 use Nabre\Repositories\Pages;
 
-class RegisterPagesMiddleware
+class SettingEnableMiddleware
 {
     public function handle(Request $request, Closure $next): mixed
     {
-        if(Pages::isDisabled('register')){
+
+        if (!settingsPageEnabled()) {
             abort(404);
         }
 

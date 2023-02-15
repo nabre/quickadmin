@@ -33,7 +33,14 @@ class Menu extends LavaryMenu
     function get($key)
     {
         return optional(optional(parent::{__FUNCTION__}($key))->filter(function ($item) {
+<<<<<<< HEAD
             $route=data_get($item->link->path,'route');
+=======
+            $route = data_get($item->link->path, 'route');
+            if (is_array($route)) {
+                $route = data_get($route, 0);
+            }
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
             return is_null($route) || Page::route($route);
         }));
     }

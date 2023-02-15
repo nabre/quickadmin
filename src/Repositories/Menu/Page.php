@@ -11,6 +11,10 @@ class Page
 {
     function add(&$menu, $route, $parent = null, bool $boolIcon = false, bool $boolText = false)
     {
+        if ($parent === false) {
+            return false;
+        }
+        $name = $route;
         $class = config('routeicons.' . $route);
         if (is_null($class)) {
             $boolIcon = false;
@@ -24,16 +28,27 @@ class Page
         $title = __('nabre-quickadmin::route.' . $route) ?? $route;
         $text = $boolText ? (($boolIcon ? ' ' : null) . $title) : null;
 
-        if (is_array($parent)) {
-            $param = array_merge(compact('route', 'title'), $parent);
-        } else {
-            $param = compact('route', 'title', 'parent');
+        if (preg_match_all("/\{(.*?[^\?])\}/i", Route::getRoutes()->getByName($name)->uri, $varsRoute) && count($varsRoute = ($varsRoute[1] ?? []))) {
+            $varsRoute = collect($varsRoute)->mapWithKeys(function ($str) {
+                return [$str => (request()->$str ?? null)];
+            })->filter()->toArray();
+
+            if (!count($varsRoute)) {
+                return false;
+            }
+            $route = [$route] + $varsRoute;
         }
 
-        $menu->add($text, $param)
-            ->prepend($icon)->nickname($route);
+        if (is_array($parent)) {
+            $options = array_merge(compact('route', 'title'), $parent);
+        } else {
+            $options = compact('route', 'title', 'parent');
+        }
 
-        return $menu->get($route)->id;
+        $menu->add($text, $options)
+            ->prepend($icon)->nickname($name);
+
+        return $menu->get($name)->id;
     }
 
     function breadcrumbs($name = 'Breadcrumbs')
@@ -56,12 +71,14 @@ class Page
     function menu($name, $class = 'navbar-nav', $view = 'nabre-quickadmin::laravel-menu.bootstrap-navbar-items')
     {
         $menu = $this->menuPrint($name);
-        if (is_null($menu)) {
+
+        if (is_null($roots = $menu->roots())) {
             return null;
         }
+
         return Html::tag(
             'ul',
-            view($view, ['items' => $menu->roots()]),
+            view($view, ['items' => $roots]),
             compact('class')
         );
     }
@@ -126,21 +143,27 @@ class Page
                 case "web":
                     break;
                 case "registration":
-
-                    break;
-                    /*    case "usersettingcompile":
-                    if (!Pages::userSettingCompile()) {
+                    if (!registerPageEnabled()) {
                         return false;
                     }
+<<<<<<< HEAD
                     break;*/
+=======
+                    break;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 case "user-account":
                     return userAccountEnabled();
                     break;
                 case "user-profile":
                     return userProfileEnabled();
                     break;
+<<<<<<< HEAD
                 case "user-settings":
                     return userSettingsEnabled();
+=======
+                case "settings-define":
+                    return settingsPageEnabled();
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                     break;
                 case "abort":
                     if (!in_array($name, [401, 403, 200])) {

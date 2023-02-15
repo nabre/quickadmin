@@ -1,11 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
+=======
+use Nabre\Quickadmin\Http\Controllers\User\AccountController;
+use Nabre\Quickadmin\Http\Controllers\User\ProfileController;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 use Nabre\Quickadmin\Http\Controllers\Admin\Users\ListController;
 use Nabre\Quickadmin\Http\Controllers\Auth\NewPasswordController;
 use Nabre\Quickadmin\Http\Controllers\Auth\VerifyEmailController;
 use Nabre\Quickadmin\Http\Controllers\Admin\Users\RolesController;
 use Nabre\Quickadmin\Http\Controllers\Auth\RegisteredUserController;
+use Nabre\Quickadmin\Http\Controllers\Builder\Settings\TypeController;
 use Nabre\Quickadmin\Http\Controllers\Auth\PasswordResetLinkController;
 use Nabre\Quickadmin\Http\Controllers\Admin\Users\ImpersonateController;
 use Nabre\Quickadmin\Http\Controllers\Admin\Users\PermissionsController;
@@ -13,8 +19,11 @@ use Nabre\Quickadmin\Http\Controllers\Auth\ConfirmablePasswordController;
 use Nabre\Quickadmin\Http\Controllers\Auth\AuthenticatedSessionController;
 use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationPromptController;
 use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationNotificationController;
+use Nabre\Quickadmin\Http\Controllers\User\SettingsController as UserSettingsController;
+use Nabre\Quickadmin\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use Nabre\Quickadmin\Http\Controllers\User\DashboardController as UserDashboardController;
 use Nabre\Quickadmin\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+<<<<<<< HEAD
 use Nabre\Quickadmin\Http\Controllers\Admin\SettingsController;
 use Nabre\Quickadmin\Http\Controllers\Builder\Settings\ListController as BuilderSetListController;
 use Nabre\Quickadmin\Http\Controllers\Builder\Settings\TypeController;
@@ -22,6 +31,17 @@ use Nabre\Quickadmin\Http\Controllers\Manage\DashboardController as ManageDashbo
 use Nabre\Quickadmin\Http\Controllers\User\AccountController;
 use Nabre\Quickadmin\Http\Controllers\User\ProfileController;
 use Nabre\Quickadmin\Http\Controllers\User\SettingsController as UserSettingsController;
+=======
+use Nabre\Quickadmin\Http\Controllers\Manage\SettingsController as ManageSettingsController;
+use Nabre\Quickadmin\Http\Controllers\Builder\SettingsController as BuilderSettingsController;
+use Nabre\Quickadmin\Http\Controllers\Manage\DashboardController as ManageDashboardController;
+use Nabre\Quickadmin\Http\Controllers\Builder\DashboardController as BuilderDashboardController;
+use Nabre\Quickadmin\Http\Controllers\Builder\Settings\ListController as BuilderSetListController;
+use Nabre\Quickadmin\Http\Controllers\Manage\ContactsController;
+use Nabre\Quickadmin\Http\Controllers\WelcomeController;
+
+Route::get('/',[WelcomeController::class,'index'])->name('welcome');
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
 Route::name("quickadmin.")->group(function () {
     Route::middleware(['verified', 'auth'])->group(function () {
@@ -34,15 +54,23 @@ Route::name("quickadmin.")->group(function () {
             Route::resource('dashboard', UserDashboardController::class, ['key' => 'data'])->only('livewire');
             Route::middleware(['user-account'])->resource('account', AccountController::class, ['key' => 'data'])->only('livewire');
             Route::middleware(['user-profile'])->resource('profile', ProfileController::class, ['key' => 'data'])->only('livewire');
+<<<<<<< HEAD
             Route::middleware(['user-settings'])->resource('settings', UserSettingsController::class, ['key' => 'data'])->only('livewire');
+=======
+            Route::middleware(['settings-define'])->resource('settings', UserSettingsController::class, ['key' => 'data'])->only('livewire');
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         });
 
         Route::name("admin.")->prefix('admin')->middleware(['role:admin'])->group(function () {
             Route::get(null, function () {
-                return redirect()->route('quickadmin.admin.dashboard.index');
+                return redirect()->route('quickadmin.admin.settings.index');
             })->name('rdr');
+<<<<<<< HEAD
             Route::resource('dashboard', AdminDashboardController::class, ['key' => 'data'])->only('livewire');
             Route::resource('settings', SettingsController::class, ['key' => 'data'])->only('livewire');
+=======
+            Route::middleware(['settings-define'])->resource('settings', AdminSettingsController::class, ['key' => 'data'])->only('livewire');
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
             Route::name("users.")->prefix('users')->group(function () {
                 Route::get(null, function () {
@@ -57,9 +85,16 @@ Route::name("quickadmin.")->group(function () {
 
         Route::name("builder.")->prefix('builder')->middleware(['role:builder'])->group(function () {
             Route::get(null, function () {
+<<<<<<< HEAD
                 return redirect()->route('quickadmin.builder.settings.rdr');
             })->name('rdr');
             Route::name("settings.")->prefix('settings')->group(function () {
+=======
+                return redirect()->route('quickadmin.builder.settings.index');
+            })->name('rdr');
+            Route::middleware(['settings-define'])->resource('settings', BuilderSettingsController::class, ['key' => 'data'])->only('livewire');
+            Route::name("settings.")->prefix('settings-define')->group(function () {
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 Route::get(null, function () {
                     return redirect()->route('quickadmin.builder.settings.list.index');
                 })->name('rdr');
@@ -69,10 +104,15 @@ Route::name("quickadmin.")->group(function () {
         });
 
         Route::name("manage.")->prefix('manage')->middleware(['role:manage'])->group(function () {
+            Route::middleware(['settings-define'])->resource('settings', ManageSettingsController::class, ['key' => 'data'])->only('livewire');
             Route::get(null, function () {
                 return redirect()->route('quickadmin.manage.dashboard.index');
             })->name('rdr');
             Route::resource('dashboard', ManageDashboardController::class, ['key' => 'data'])->only('livewire');
+<<<<<<< HEAD
+=======
+            Route::resource('contacts', ContactsController::class, ['key' => 'data'])->only('livewire');
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         });
     });
 });
