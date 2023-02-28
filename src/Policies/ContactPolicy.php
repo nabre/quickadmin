@@ -2,7 +2,7 @@
 
 namespace Nabre\Quickadmin\Policies;
 
-use Nabre\Quickadmin\Models\Contact as Model;
+use App\Models\Contact as Model;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

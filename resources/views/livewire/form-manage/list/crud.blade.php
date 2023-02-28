@@ -53,7 +53,11 @@
                                     <div class="modal-body">
                                         <h3>Anteprima:</h3>
                                         @include(
+<<<<<<< HEAD
+                                            'nabre-quickadmin::livewire.form-manage.form.items',
+=======
                                             'nabre-quickadmin::livewire.form-manage.list.preview',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                                             ['items' => data_get($value, 'items', [])]
                                         )
                                     </div>
@@ -91,7 +95,11 @@
                                     <div class="modal-body">
                                         <h3>Anteprima:</h3>
                                         @include(
+<<<<<<< HEAD
+                                            'nabre-quickadmin::livewire.form-manage.form.items',
+=======
                                             'nabre-quickadmin::livewire.form-manage.list.preview',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                                             ['items' => data_get($value, 'items', [])]
                                         )
                                     </div>
@@ -122,7 +130,11 @@
                                     </div>
                                     <div class="modal-body">
                                         @include(
+<<<<<<< HEAD
+                                            'nabre-quickadmin::livewire.form-manage.form.items',
+=======
                                             'nabre-quickadmin::livewire.form-manage.list.preview',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                                             ['items' => data_get($value, 'items', [])]
                                         )
                                     </div>

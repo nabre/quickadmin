@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Nabre\Quickadmin\Setting\Manager;
 use Illuminate\Support\ServiceProvider;
+<<<<<<< HEAD
+=======
 use Lavary\Menu\Builder as LavaryBuilder;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 use Nabre\Quickadmin\Repositories\Menu\Menu;
 use Illuminate\Session\Middleware\StartSession;
 use Nabre\Quickadmin\View\Components\AppLayout;
@@ -16,12 +19,28 @@ use Nabre\Quickadmin\View\Components\GuestLayout;
 use Nabre\Quickadmin\Http\Middleware\GenerateMenu;
 use Nabre\Quickadmin\Setting\Facade as SettingFacade;
 use App\Http\Middleware\GenerateMenu as AppGenerateMenu;
+<<<<<<< HEAD
+use Lavary\Menu\Builder as LavaryBuilder;
+use Lavary\Menu\Item as LavaryItem;
+use Nabre\Quickadmin\Console\Commands\Sync\FormFieldTypeCommand;
+=======
 use Nabre\Quickadmin\Console\Commands\OptimizeCommand;
 use Nabre\Quickadmin\Repositories\Menu\Item as MenuItem;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 use Nabre\Quickadmin\Console\Commands\Sync\SettingCommand;
 use Nabre\Quickadmin\Repositories\LocalizationRepositorie;
 use Nabre\Quickadmin\Http\Middleware\EnsureEmailIsVerified;
 use Nabre\Quickadmin\Http\Middleware\ImpersonateMiddleware;
+<<<<<<< HEAD
+use Nabre\Quickadmin\Http\Middleware\AccountEnableMiddleware;
+use Nabre\Quickadmin\Http\Middleware\ProfileEnableMiddleware;
+use Nabre\Quickadmin\Console\Commands\Update\PermissionCommand;
+use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
+use Nabre\Quickadmin\Http\Middleware\SettingOverrideMiddleware;
+use Nabre\Quickadmin\Http\Middleware\UserSettingEnableMiddleware;
+use Nabre\Quickadmin\Repositories\Menu\Builder as MenuBuilder;
+use Nabre\Quickadmin\Repositories\Menu\Item as MenuItem;
+=======
 use Nabre\Quickadmin\Repositories\Menu\Builder as MenuBuilder;
 use Nabre\Quickadmin\Console\Commands\Update\PermissionCommand;
 use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
@@ -31,13 +50,18 @@ use Nabre\Quickadmin\Http\Middleware\PagesEnable\AccountEnableMiddleware;
 use Nabre\Quickadmin\Http\Middleware\PagesEnable\ProfileEnableMiddleware;
 use Nabre\Quickadmin\Http\Middleware\PagesEnable\SettingEnableMiddleware;
 use Nabre\Quickadmin\Http\Middleware\RegisterPageMiddleware;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
 class AppServiceProvider extends ServiceProvider
 {
     public $bindings = [
         \Illuminate\Routing\ResourceRegistrar::class => \Nabre\Quickadmin\Routing\ResourceRegistrar::class,
         LavaryMenu::class => Menu::class,
+<<<<<<< HEAD
+        LavaryBuilder::class=>MenuBuilder::class,
+=======
         LavaryBuilder::class => MenuBuilder::class,
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     ];
 
     function register()
@@ -81,8 +105,12 @@ class AppServiceProvider extends ServiceProvider
         $router->aliasMiddleware('permission', \Maklad\Permission\Middlewares\PermissionMiddleware::class);
         $router->aliasMiddleware('user-account', AccountEnableMiddleware::class);
         $router->aliasMiddleware('user-profile', ProfileEnableMiddleware::class);
+<<<<<<< HEAD
+        $router->aliasMiddleware('user-settings', UserSettingEnableMiddleware::class);
+=======
         $router->aliasMiddleware('settings-define', SettingEnableMiddleware::class);
         $router->aliasMiddleware('registration', RegisterPageMiddleware::class);
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
         /**
          *  Config
@@ -123,6 +151,17 @@ class AppServiceProvider extends ServiceProvider
             OptimizeCommand::class,
         ]);
         //    }
+
+        /**
+         * Commands
+         */
+ //       if ($this->app->runningInConsole()) {
+            $this->commands([
+                PermissionCommand::class,
+                SettingCommand::class,
+                FormFieldTypeCommand::class,
+            ]);
+    //    }
 
         /**
          * Translation

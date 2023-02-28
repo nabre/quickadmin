@@ -85,8 +85,19 @@ return [
         'app.locale' => 'app_locale',
         'app.name' => 'app_name',
         'app.debug' => 'app_debug',
+<<<<<<< HEAD
+        'mail.mailers.smtp.host' => 'mail_host',
+        'mail.mailers.smtp.port' => 'mail_port',
+        'mail.mailers.smtp.encryption' => 'mail_encryption',
+        'mail.mailers.smtp.username' => 'mail_username',
+        'mail.mailers.smtp.password' => 'mail_password',
+        'mail.from.address' => 'mail_from_address',
+        'mail.from.name' => 'mail_from_name',
+        'setting.define.autousergenerate' => 'setting_autousergenerate',
+=======
         'setting.define.autousergenerate' => 'setting_autousergenerate',
         'setting.define.register-form' => 'register_form',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     ],
 
     'define' => [

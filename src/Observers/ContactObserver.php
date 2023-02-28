@@ -2,13 +2,14 @@
 
 namespace Nabre\Quickadmin\Observers;
 
-use Nabre\Quickadmin\Models\Contact as Model;
+use App\Models\Contact as Model;
 use App\Models\User;
 
 class ContactObserver
 {
     function saved(Model $model)
     {
+
         if($email=data_get($model,'email')){
             if(config('setting.define.autousergenerate')){
                 $account=$model->account;

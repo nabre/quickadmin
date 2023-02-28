@@ -29,6 +29,10 @@ class ManageDatabaseCRUD extends Component
     var int $countActiveIds = 0;
 
     protected $formCompiled;
+<<<<<<< HEAD
+    protected $setFormParams = ['idData', 'view', 'back', 'crud', 'trashsoft', 'onlyRead'];
+    protected $setDefineParams = ['idData', 'view', 'back', 'crud', 'trashsoft', 'onlyRead', 'rules', 'items', 'values', 'rows', 'trashIcon', 'trashIds', 'activeIds'];
+=======
     protected $setFormParams = [
         'idData',
         'view',
@@ -54,6 +58,7 @@ class ManageDatabaseCRUD extends Component
         'activeIds'
     ];
 
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     protected $countCalculation = [
         'trashIds' => 'countTrashIds',
         'activeIds' => 'countActiveIds',
@@ -67,6 +72,10 @@ class ManageDatabaseCRUD extends Component
 
     private function defaultSettings()
     {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         $params = (new $this->formClass)->readSettings($this->idData);
         collect($params)->each(function ($v, $k) {
             $this->$k = $v;
@@ -101,27 +110,42 @@ class ManageDatabaseCRUD extends Component
     function submit()
     {
         $fn = $this->form()->submit();
+<<<<<<< HEAD
+        if ((bool)$fn($this->formCompiled, $this->values)) {
+            $values = data_get($this->validate(), 'values', []);
+            if ($this->view == 'form-list') {
+                collect($values)->each(function ($i) {
+                    $this->form()->save($i);
+=======
 
         if ((bool)$fn($this->formCompiled, $this->values)) {
             $values = data_get($this->validate(), 'values', []);
             if ($this->view == 'form-list') {
                 collect($values)->each(function ($values) {
                     $this->form()->save($values);
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 });
             } else {
                 $this->form()->save($values);
             }
         }
+<<<<<<< HEAD
+=======
 
         if ($this->back) {
             $this->idData = null;
         }
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         $this->back();
     }
 
     function refresh()
     {
+<<<<<<< HEAD
+        $this->form()->runRefresh();
+=======
         (new $this->formClass)->runRefresh();
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         $this->back();
     }
 
@@ -168,7 +192,13 @@ class ManageDatabaseCRUD extends Component
 
     private function define($force = false)
     {
+<<<<<<< HEAD
+
         $param = $this->form($force)->array();
+        //   dd($param,$this);
+=======
+        $param = $this->form($force)->array();
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         collect($this->setDefineParams)->each(function ($var) use ($param) {
             $this->$var = data_get($param, $var);
         });
@@ -188,6 +218,10 @@ class ManageDatabaseCRUD extends Component
                 });
             $fc->input($this->idData);
             $this->formCompiled = $fc;
+<<<<<<< HEAD
+            //  dd($fc);
+=======
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         }
 
         return $this->formCompiled;

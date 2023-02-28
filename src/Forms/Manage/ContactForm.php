@@ -2,9 +2,10 @@
 
 namespace Nabre\Quickadmin\Forms\Manage;
 
+use App\Models\Role;
 use Nabre\Quickadmin\Repositories\Form\Form;
 use Nabre\Quickadmin\Repositories\Form\Field;
-use Nabre\Quickadmin\Models\Contact as Model;
+use App\Models\Contact as Model;
 
 class ContactForm extends Form
 {

@@ -42,9 +42,12 @@ return [
             [
                 'index' => 'fa-solid fa-gauge'
             ],
+<<<<<<< HEAD
+=======
             'settings' => [
                 'index' => 'fa-solid fa-sliders',
             ],
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         ],
         'user' =>
         [
@@ -65,6 +68,10 @@ return [
         ],
         'builder' => [
             'rdr' => 'fa-solid fa-tower-observation',
+<<<<<<< HEAD
+            'settings' => [
+                'rdr' => 'fa-solid fa-sliders',
+=======
             'dashboard' =>
             [
                 'index' => 'fa-solid fa-gauge'
@@ -72,6 +79,7 @@ return [
             'settings' => [
                 'index' => 'fa-solid fa-sliders',
                 'rdr' => 'fa-solid fa-wrench',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 'list' =>
                 [
                     'index' => 'fa-solid fa-table-list',

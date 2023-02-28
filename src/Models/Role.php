@@ -33,9 +33,14 @@ class Role extends Original
         'route_used' => 'boolean',
     ];
 
+<<<<<<< HEAD
+    function user():BelongsToMany{
+        return $this->belongsToMany(User::class,null);
+=======
     function user(): BelongsToMany
     {
         return $this->belongsToMany(User::class, null);
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     }
 
     function getEtiAttribute()
@@ -45,7 +50,11 @@ class Role extends Original
         if (!is_null($ret)) {
             $ret .= '] ';
         }
+<<<<<<< HEAD
+        $ret .= empty($this->slug)?$this->name:$this->slug;
+=======
         $ret .= empty($this->slug) ? $this->name : $this->slug;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
         return $ret;
     }

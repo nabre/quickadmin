@@ -146,15 +146,24 @@ class Page
                     if (!registerPageEnabled()) {
                         return false;
                     }
+<<<<<<< HEAD
+                    break;*/
+=======
                     break;
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 case "user-account":
                     return userAccountEnabled();
                     break;
                 case "user-profile":
                     return userProfileEnabled();
                     break;
+<<<<<<< HEAD
+                case "user-settings":
+                    return userSettingsEnabled();
+=======
                 case "settings-define":
                     return settingsPageEnabled();
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                     break;
                 case "abort":
                     if (!in_array($name, [401, 403, 200])) {

@@ -57,12 +57,17 @@ return [
         ],
         'builder' => [
             'rdr' => 'Costruttore',
+<<<<<<< HEAD
+            'settings' => [
+                'rdr' => 'Impostazioni',
+=======
             'dashboard' => [
                 'index' => 'Dashboard',
             ],
             'settings' => [
                 'index' => 'Impostazioni',
                 'rdr' => 'Definisci impostazioni',
+>>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                 'list' =>
                 [
                     'index' => 'Elenco impostazioni',
