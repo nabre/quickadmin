@@ -17,10 +17,6 @@ class SettingPolicy
         }
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     function viewAny(User $user)
     {
         return true;

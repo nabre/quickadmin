@@ -331,11 +331,7 @@ class Form
             switch ($e->get(FormConst::REL_TYPE)) {
                 case "BelongsTo":
                 case "HasOne":
-<<<<<<< HEAD
-                    $value = $value ?? '';
-=======
                     $value = $value ?? ($e->isRequired() ? collect($e->get(FormConst::LIST_ITEMS))->keys()->first() : '');
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                     break;
                 case "BelongsToMany":
                 case "HasMany":
@@ -405,12 +401,8 @@ class Form
 
     function rowItem($row, $l)
     {
-<<<<<<< HEAD
-        $call = new (get_class($this));
-=======
         $class=get_class($this);
         $call = new $class;
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         if ($this->view == 'form-list') {
             $call->view = 'list';
             $call->onlyRead = false;
@@ -537,11 +529,7 @@ class Form
     {
         $fn = $this->refresh();
         $this->callFn($fn);
-<<<<<<< HEAD
-        $this->getElements(true);
-=======
      //   $this->getElements(true);
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         return $this;
     }
 }

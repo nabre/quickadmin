@@ -17,7 +17,7 @@ class SettingsBackForm extends Form
     {
         $this->add('string');
         $output = function ($data) {
-            return data_get($data, 'type') ?? Field::STATIC;
+            return data_get($data, 'type.key') ?? Field::STATIC;
         };
         $this->add(config('setting.database.value'), $output);
         if ($this->rolePage() == 'builder') {
@@ -32,11 +32,11 @@ class SettingsBackForm extends Form
 
     function query($items)
     {
-        return SettingService::enabledCustomize($items, (array) $this->rolePage(),$this->rolePage());
+        return SettingService::enabledCustomize($items, (array) $this->rolePage(), $this->rolePage());
     }
 
     function settings()
     {
-        return ['view' => 'form-list' ,'head'=>false];
+        return ['view' => 'form-list', 'head' => false];
     }
 }

@@ -1,8 +1,4 @@
 <?php
-<<<<<<< HEAD
-=======
-
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 namespace Nabre\Quickadmin\Repositories\Form\Supports;
 
 use Nabre\Quickadmin\Repositories\Form\Field;
@@ -10,12 +6,8 @@ use Illuminate\Support\Facades\Gate;
 use Nabre\Quickadmin\Repositories\Form\CollectionElements;
 use Nabre\Quickadmin\Repositories\Form\Item;
 
-<<<<<<< HEAD
-trait AddItems{
-=======
 trait AddItems
 {
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     public function add($variable, $output = null): Item
     {
         $item = new Item($this, $variable, $output);
@@ -67,10 +59,7 @@ trait AddItems
                     $copy = Gate::inspect('copy', $this->getData())->allowed();
                     $delete = Gate::inspect('delete', $this->getData())->allowed();
                     $delete_force = $delete && Gate::inspect('delete_force', $this->getData())->allowed();
-<<<<<<< HEAD
-=======
                     $restore = Gate::inspect('restore', $this->getData())->allowed();
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
                     #stato
                     $trashed = (bool) data_get($data = $this->getData(), 'deleted_at') && method_exists($data, 'trashed');
@@ -79,15 +68,9 @@ trait AddItems
                     $crud->put('update', !$trashed && $update);
                     $crud->put('copy', !$trashed && $copy);
                     $crud->put('view', $view);
-<<<<<<< HEAD
-                    $crud->put('restore', $delete  && $trashed);
-                    $crud->put('delete', !$trashed && $delete);
-                    $crud->put('delete_force', $delete_force  && $trashed);
-=======
                     $crud->put('delete', !$trashed && $delete);
                     $crud->put('restore', $trashed && $restore);
                     $crud->put('delete_force', $trashed && $delete_force);
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                     break;
             }
 
@@ -114,7 +97,3 @@ trait AddItems
         return $this->add(null, Field::MSG)->value(get_defined_vars());
     }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870

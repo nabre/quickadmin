@@ -34,10 +34,6 @@ class ImpersonateForm extends Form
 
     function query($items)
     {
-<<<<<<< HEAD
-        return $items->reject(fn ($i) => data_get($i, 'id') == auth()->user()->id)->values();
-=======
         return $items->reject(fn ($i) => data_get($i, 'id') == data_get(auth()->user(),'id'))->values();
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     }
 }

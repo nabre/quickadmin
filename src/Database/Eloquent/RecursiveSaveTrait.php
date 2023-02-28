@@ -53,32 +53,19 @@ trait RecursiveSaveTrait
     function recursiveSave(array $data, $syncBool = true, $saveQuietly = false)
     {
         $element = $this;
-<<<<<<< HEAD
-        if (!is_null($id = data_get($data, $this->getKeyName()))) {
-=======
         if (!is_null($id = data_get($data, $this->getKeyName())) && $id != data_get($element, $this->getKeyName(), 0)) {
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
             $element = self::find($id) ?? self::make();
         }
 
         $relations = $element->definedRelations();
-<<<<<<< HEAD
-        $element->fillable = array_values(array_unique(array_merge($element->getFillable(), $element->fillable)));
-=======
         $element->fillable = collect($element->getFillable())->merge($element->fillable)->unique()->sort()->toArray();
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
         $dataFill = collect($data)
             ->reject(fn ($v, $k) => in_array($k, $relations->pluck('name')->toArray()))
             ->reject(fn ($v, $k) => in_array($k, $this->getAttributesArray()))
             ->map(function ($val, $key) use ($element) {
-<<<<<<< HEAD
-                $type = data_get($element->casts, $key);
-                switch ($type) {
-=======
                 $cast = data_get($element->casts, $key);
                 switch ($cast) {
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                     case "array":
                         $val = array_values(array_filter((array)$val, 'strlen'));
                         break;

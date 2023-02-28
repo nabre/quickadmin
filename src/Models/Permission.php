@@ -29,13 +29,8 @@ class Permission extends Original
         'route_used' => false,
     ];
 
-<<<<<<< HEAD
-    protected $casts=[
-        'slug'=> LocalCast::class,
-=======
     protected $casts = [
         'slug' => LocalCast::class,
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         'route_used' => 'boolean',
     ];
 

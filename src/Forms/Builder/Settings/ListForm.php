@@ -13,15 +13,9 @@ class ListForm extends Form
 
     function build()
     {
-<<<<<<< HEAD
-        $this->add(config('setting.database.key'), Field::STATIC);
-        $this->add('type')->list('string');
-        $this->add('roles')->list('eti');
-=======
         $this->add('string');
         $this->add(config('setting.database.key'), Field::STATIC);
-        $this->add('type');
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
+        $this->add('type')->list('key');
         $disable = function ($data) {
             return data_get($data, 'user_setting_disable');
         };

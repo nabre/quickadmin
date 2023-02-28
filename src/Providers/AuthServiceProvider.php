@@ -11,10 +11,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use Nabre\Quickadmin\Models\FormFieldType;
 use Nabre\Quickadmin\Models\Setting;
-<<<<<<< HEAD
-=======
 use Nabre\Quickadmin\Policies\ContactPolicy;
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 use Nabre\Quickadmin\Policies\FormFieldTypePolicy;
 use Nabre\Quickadmin\Policies\PermissionPolicy;
 use Nabre\Quickadmin\Policies\RolePolicy;
@@ -34,10 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Setting::class=>SettingPolicy::class,
         FormFieldType::class=>FormFieldTypePolicy::class,
-<<<<<<< HEAD
-=======
         Contact::class=>ContactPolicy::class,
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     ];
 
     /**

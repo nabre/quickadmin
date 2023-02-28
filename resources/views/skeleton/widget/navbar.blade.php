@@ -7,13 +7,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-<<<<<<< HEAD
-            <ul class="navbar-nav  me-auto mb-2 mb-lg-0"> </ul>
-
-            <ul class="navbar-nav  mb-2 mb-lg-0">
-@include('nabre-quickadmin::skeleton.widget.user-info')
-                {!! Nabre\Quickadmin\Facades\Repositories\Menu\Page::menu('QuickBar', 'navbar-nav mb-2 mb-lg-0') !!}
-=======
             <ul class="navbar-nav  me-auto mb-2 mb-lg-0">
                 {!! menuRender('TopBar', 'navbar-nav mb-2 mb-lg-0') !!}
             </ul>
@@ -21,7 +14,6 @@
             <ul class="navbar-nav  mb-2 mb-lg-0">
                 @include('nabre-quickadmin::skeleton.widget.user-info')
                 {!! menuRender('QuickBar', 'navbar-nav mb-2 mb-lg-0') !!}
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
             </ul>
         </div>
     </div>

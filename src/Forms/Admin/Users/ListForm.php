@@ -15,11 +15,8 @@ class ListForm extends Form
     {
         $this->add('email')->required()->unique()->email();
         $this->add('name')->required();
-<<<<<<< HEAD
-=======
         $this->add('contact')->onlyList()->list('full_name');
 
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
 
         $rolesDisabled = function ($data) {
             $min = auth()->user()->roles->min('priority');
@@ -37,12 +34,9 @@ class ListForm extends Form
         $enbleDisable = function ($data): bool {
             return auth()->user()->id == $data->id;
         };
-<<<<<<< HEAD
-=======
 
         $this->add('permissions')->list('eti');
 
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
         $this->add('enabled', Field::BOOLEAN)->onlyForm()->disable($enbleDisable);
 
         $this->add('Stato')->value(function ($data) {

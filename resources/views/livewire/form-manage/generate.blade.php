@@ -5,5 +5,8 @@
         data_set($_i, \Nabre\Quickadmin\Repositories\Form\FormConst::ERRORS_PRINT, $_ins);
     @endphp
 @endif
-{!! Nabre\Quickadmin\Repositories\Form\Facades\FieldFacade::generate($_i) !!}
+@php
+    $_str=Nabre\Quickadmin\Repositories\Form\Facades\FieldFacade::generate($_i) ;
+@endphp
+{!! $_str!!}
 

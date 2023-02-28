@@ -127,13 +127,10 @@ class Item
         return $this;
     }
 
-<<<<<<< HEAD
-=======
     function isRequired(){
         return in_array(Rule::required(),$this->get(FormConst::RULES,[]));
     }
 
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
     function email($str = 'rfc,dns')
     {
         $rule = Rule::email($str);
@@ -426,11 +423,7 @@ class Item
                         $enabled = $enabled->push(Field::TEXTAREA_CKEDITOR);
                         break;
                     default:
-<<<<<<< HEAD
-                        $enabled = $enabled->merge(FieldFacade::getConstants());
-=======
                         $enabled = $enabled->merge(FieldFacade::getConstants())->values();
->>>>>>> 4b302560c1852bff3044a2719c00b9a7293fa870
                         break;
                 }
                 break;
