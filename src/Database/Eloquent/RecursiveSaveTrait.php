@@ -33,6 +33,15 @@ trait RecursiveSaveTrait
         return $value;
     }
 
+    function readArray(array $array = [], $original = true)
+    {
+
+        return collect($array)->mapWithKeys(function ($key) use ($original) {
+            $value = $this->readValue($key, $original);
+            return [$key => $value];
+        })->toArray();
+    }
+
     function recursiveSaveQuietly(array $data, $syncBool = true)
     {
         return $this->recursiveSave($data, $syncBool, true);
@@ -53,7 +62,7 @@ trait RecursiveSaveTrait
     function recursiveSave(array $data, $syncBool = true, $saveQuietly = false)
     {
         $element = $this;
-        if (!is_null($id = data_get($data, $this->getKeyName())) && $id != data_get($element, $this->getKeyName(), 0)) {
+        if ((($id = data_get($data, $this->getKeyName(), 0)) != data_get($element, $this->getKeyName(), 0)) || $id == 0) {
             $element = self::find($id) ?? self::make();
         }
 
@@ -109,7 +118,6 @@ trait RecursiveSaveTrait
                         break;
                     case 'BelongsToMany':
                     case 'HasMany':
-
                         $ids = collect((array)$data)
                             ->map(function ($d) use ($model, $syncBool, $saveQuietly, $element) {
                                 return $element->nestedSave($model, $d, $syncBool, $saveQuietly);
@@ -151,6 +159,7 @@ trait RecursiveSaveTrait
                         if (!is_null($instance)) {
                             $cont->saveMany($instance);
                         }
+
                         break;
                     case 'EmbedsOne':
                         if (is_null($data) || !count((array)$data)) {

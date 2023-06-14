@@ -15,9 +15,9 @@ class ContactForm extends Form
     {
         $this->add('lastname')->required();
         $this->add('firstname')->required();
-        $this->add('email')->required()->unique()->email();
-        $this->add('permission')->required()->list('eti');
-        $this->add('account_bool',Field::BOOLEAN)->onlyList();
+     //   $this->add('email')->required()->unique()->email();
+     //   $this->add('permission')->required()->list('eti');
+     //   $this->add('account_bool',Field::BOOLEAN)->onlyList();
 
       /*  $this->add('name')->required();
 

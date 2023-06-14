@@ -87,11 +87,13 @@ return [
         'app.debug' => 'app_debug',
         'setting.define.autousergenerate' => 'setting_autousergenerate',
         'setting.define.register-form' => 'register_form',
+        'setting.define.shop-pages' => 'shop_pages',
     ],
 
     'define' => [
         'autousergenerate' => false,
-        'setting.define.register-form' => false,
+        'register-form' => false,
+        'shop-pages' => false,
     ],
 
     'type' => [
@@ -104,6 +106,10 @@ return [
             'role' => 1,
         ],
         'app_debug' => [
+            'type' => Field::BOOLEAN,
+            'role' => 0,
+        ],
+        'shop_pages' => [
             'type' => Field::BOOLEAN,
             'role' => 0,
         ],

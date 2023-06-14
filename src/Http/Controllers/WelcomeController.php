@@ -2,11 +2,13 @@
 
 namespace Nabre\Quickadmin\Http\Controllers;
 
+use Nabre\Quickadmin\Forms\NewForm;
+
 class WelcomeController extends Controller
 {
-    function index()
+    function index($mode=null,$idData=null)
     {
-        $CONTENT = get_class($this);
+        $CONTENT = NewForm::public($mode,$idData);
         return view('welcome', get_defined_vars());
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Contact;
 use Nabre\Quickadmin\Models\Role;
 use Nabre\Quickadmin\Models\Setting;
 use Nabre\Quickadmin\Services\SettingService;
@@ -9,14 +10,19 @@ function userAccountEnabled()
     return !userProfileEnabled();
 }
 
-
 function userProfileEnabled()
 {
-    return !is_null(optional(auth()->user())->contact);
+    return userProfileModelExist() && !is_null(optional(auth()->user())->contact);
 }
 
-function userSettingsEnabled(){
-    $settings=Setting::doesnthave('user')->get()->filter(fn($i)=>data_get($i,'user_setting'));
+function userProfileModelExist()
+{
+    return class_exists(Contact::class);
+}
+
+function userSettingsEnabled()
+{
+    $settings = Setting::doesnthave('user')->get()->filter(fn ($i) => data_get($i, 'user_setting'));
     return $settings->count();
 }
 
@@ -40,4 +46,9 @@ function settingsPageEnabled()
 function registerPageEnabled()
 {
     return config('setting.define.register-form');
+}
+
+function shopPageEnabled()
+{
+    return config('setting.define.shop-pages');
 }

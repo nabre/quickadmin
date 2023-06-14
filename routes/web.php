@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Nabre\Quickadmin\Http\Controllers\WelcomeController;
+use Nabre\Quickadmin\Http\Controllers\Shop\PaymentController;
 use Nabre\Quickadmin\Http\Controllers\User\AccountController;
 use Nabre\Quickadmin\Http\Controllers\User\ProfileController;
+use Nabre\Quickadmin\Http\Controllers\Manage\ContactsController;
 use Nabre\Quickadmin\Http\Controllers\Admin\Users\ListController;
 use Nabre\Quickadmin\Http\Controllers\Auth\NewPasswordController;
 use Nabre\Quickadmin\Http\Controllers\Auth\VerifyEmailController;
@@ -15,22 +18,48 @@ use Nabre\Quickadmin\Http\Controllers\Admin\Users\PermissionsController;
 use Nabre\Quickadmin\Http\Controllers\Auth\ConfirmablePasswordController;
 use Nabre\Quickadmin\Http\Controllers\Auth\AuthenticatedSessionController;
 use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationPromptController;
+use Nabre\Quickadmin\Http\Controllers\Builder\Settings\RefreshPanelController;
 use Nabre\Quickadmin\Http\Controllers\Auth\EmailVerificationNotificationController;
 use Nabre\Quickadmin\Http\Controllers\User\SettingsController as UserSettingsController;
 use Nabre\Quickadmin\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use Nabre\Quickadmin\Http\Controllers\User\DashboardController as UserDashboardController;
-use Nabre\Quickadmin\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use Nabre\Quickadmin\Http\Controllers\Manage\SettingsController as ManageSettingsController;
 use Nabre\Quickadmin\Http\Controllers\Builder\SettingsController as BuilderSettingsController;
 use Nabre\Quickadmin\Http\Controllers\Manage\DashboardController as ManageDashboardController;
-use Nabre\Quickadmin\Http\Controllers\Builder\DashboardController as BuilderDashboardController;
 use Nabre\Quickadmin\Http\Controllers\Builder\Settings\ListController as BuilderSetListController;
-use Nabre\Quickadmin\Http\Controllers\Manage\ContactsController;
-use Nabre\Quickadmin\Http\Controllers\WelcomeController;
+use Nabre\Quickadmin\Http\Controllers\Shop\ShopController;
 
-Route::get('/',[WelcomeController::class,'index'])->name('welcome');
+Route::macro('livewire', function ($route, $method) {
+    $string = collect(explode("/", $route))->push('{mode?}', '{id?}')->implode("/");
+    return Route::get($string, $method);
+});
+
+Route::livewire('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::name("quickadmin.")->group(function () {
+    Route::middleware(['shop'])->group(function () {
+        Route::name("shop.")->prefix('shop')->group(function () {
+            Route::get(null, function () {
+                return redirect()->route('quickadmin.shop.products');
+            })->name('rdr');
+
+            Route::get('products', [ShopController::class, 'products'])->name('products');
+            Route::get('cart', [ShopController::class, 'cart'])->name('cart');
+            Route::get('invoice', [ShopController::class, 'invoice'])->name('invoice');
+        });
+
+        Route::name("pay.")->prefix('pay')->group(function () {
+            Route::get(null, function () {
+                return redirect()->route('quickadmin.pay.status', ['status' => 'checkout']);
+            })->name('rdr');
+            Route::get('{status}/{mode?}', [PaymentController::class, 'status'])->name('status');
+            Route::name("response.")->prefix('response')->group(function () {
+                Route::get('success', [PaymentController::class, 'success'])->name('success');
+                Route::get('cancel', [PaymentController::class, 'cancel'])->name('cancel');
+            });
+        });
+    });
+
     Route::middleware(['verified', 'auth'])->group(function () {
         Route::resource('admin/user/impersonate', ImpersonateController::class, ['key' => 'data'])->only(['create']);
 
@@ -72,6 +101,7 @@ Route::name("quickadmin.")->group(function () {
                 })->name('rdr');
                 Route::resource('list', BuilderSetListController::class, ['key' => 'data'])->only('livewire');
                 Route::resource('type', TypeController::class, ['key' => 'data'])->only('livewire');
+                Route::resource('refresh', RefreshPanelController::class, ['key' => 'data'])->only('livewire');
             });
         });
 
@@ -81,7 +111,7 @@ Route::name("quickadmin.")->group(function () {
                 return redirect()->route('quickadmin.manage.dashboard.index');
             })->name('rdr');
             Route::resource('dashboard', ManageDashboardController::class, ['key' => 'data'])->only('livewire');
-            Route::resource('contacts', ContactsController::class, ['key' => 'data'])->only('livewire');
+            Route::middleware(['user-contact-model'])->resource('contacts', ContactsController::class, ['key' => 'data'])->only('livewire');
         });
     });
 });

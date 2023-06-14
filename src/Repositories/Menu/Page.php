@@ -115,11 +115,6 @@ class Page
         foreach ($middleware as $mid) {
             @list($auth, $name) = explode(":", $mid);
             switch ($auth) {
-                case "auth":
-                    if (!Auth::check()) {
-                        return false;
-                    }
-                    break;
                 case "verified":
                     if (is_null($user) || (!impersonateCheck() && userEmailVerified())) {
                         return false;
@@ -135,29 +130,42 @@ class Page
                         return false;
                     }
                     break;
-                case "guest":
-                    if (Auth::check()) {
-                        return false;
-                    }
-                    break;
                 case "web":
-                    break;
-                case "registration":
-                    if (!registerPageEnabled()) {
-                        return false;
-                    }
-                    break;
-                case "user-account":
-                    return userAccountEnabled();
-                    break;
-                case "user-profile":
-                    return userProfileEnabled();
-                    break;
-                case "settings-define":
-                    return settingsPageEnabled();
                     break;
                 case "abort":
                     if (!in_array($name, [401, 403, 200])) {
+                        return false;
+                    }
+                    break;
+                default:
+                    $bool = true;
+                    switch ($auth) {
+                        case "auth":
+                            $bool = Auth::check();
+                            break;
+                        case "guest":
+                            $bool = !Auth::check();
+                            break;
+                        case "registration":
+                            $bool = registerPageEnabled();
+                            break;
+                        case "user-account":
+                            $bool = userAccountEnabled();
+                            break;
+                        case "user-profile":
+                            $bool = userProfileEnabled();
+                            break;
+                        case "settings-define":
+                            $bool = settingsPageEnabled();
+                            break;
+                        case 'user-contact-model':
+                            $bool = userProfileModelExist();
+                            break;
+                        case 'shop':
+                            $bool = shopPageEnabled();
+                            break;
+                    }
+                    if (!$bool) {
                         return false;
                     }
                     break;

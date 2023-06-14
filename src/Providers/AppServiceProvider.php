@@ -27,10 +27,14 @@ use Nabre\Quickadmin\Console\Commands\Update\PermissionCommand;
 use Nabre\Quickadmin\Http\Middleware\SettingAutoSaveMiddleware;
 use Nabre\Quickadmin\Http\Middleware\SettingOverrideMiddleware;
 use Nabre\Quickadmin\Console\Commands\Sync\FormFieldTypeCommand;
+use Nabre\Quickadmin\Console\Commands\Update\UserCommand;
+use Nabre\Quickadmin\Http\Middleware\HttpRedirectSecure;
 use Nabre\Quickadmin\Http\Middleware\PagesEnable\AccountEnableMiddleware;
+use Nabre\Quickadmin\Http\Middleware\PagesEnable\ContactMiddleware;
 use Nabre\Quickadmin\Http\Middleware\PagesEnable\ProfileEnableMiddleware;
 use Nabre\Quickadmin\Http\Middleware\PagesEnable\SettingEnableMiddleware;
 use Nabre\Quickadmin\Http\Middleware\RegisterPageMiddleware;
+use Nabre\Quickadmin\Http\Middleware\ShopPageMiddleware;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
         $kernel->pushMiddleware(ImpersonateMiddleware::class);
         $kernel->pushMiddleware(SettingOverrideMiddleware::class);
         $router->pushMiddlewareToGroup('web', GenerateMenu::class);
+        $router->pushMiddlewareToGroup('web', HttpRedirectSecure::class);
         $router->aliasMiddleware('role', \Maklad\Permission\Middlewares\RoleMiddleware::class);
         $router->aliasMiddleware('permission', \Maklad\Permission\Middlewares\PermissionMiddleware::class);
         $router->aliasMiddleware('user-account', AccountEnableMiddleware::class);
@@ -84,6 +89,8 @@ class AppServiceProvider extends ServiceProvider
         $router->aliasMiddleware('user-settings', UserSettingEnableMiddleware::class);
         $router->aliasMiddleware('settings-define', SettingEnableMiddleware::class);
         $router->aliasMiddleware('registration', RegisterPageMiddleware::class);
+        $router->aliasMiddleware('user-contact-model', ContactMiddleware::class);
+        $router->aliasMiddleware('shop', ShopPageMiddleware::class);
 
         /**
          *  Config
@@ -116,25 +123,13 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Commands
          */
-        //       if ($this->app->runningInConsole()) {
         $this->commands([
             PermissionCommand::class,
             SettingCommand::class,
             FormFieldTypeCommand::class,
             OptimizeCommand::class,
+            UserCommand::class,
         ]);
-        //    }
-
-        /**
-         * Commands
-         */
- //       if ($this->app->runningInConsole()) {
-            $this->commands([
-                PermissionCommand::class,
-                SettingCommand::class,
-                FormFieldTypeCommand::class,
-            ]);
-    //    }
 
         /**
          * Translation

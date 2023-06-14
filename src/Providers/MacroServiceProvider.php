@@ -5,11 +5,9 @@ namespace Nabre\Quickadmin\Providers;
 use Collective\Html\HtmlFacade as Html;
 use Collective\Html\FormFacade as Form;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
-use Nabre\Quickadmin\Repositories\Form\Field;
-use Nabre\Quickadmin\Repositories\Form\FormConst;
 use Nabre\Quickadmin\View\Components\Boolean;
 
 class MacroServiceProvider extends ServiceProvider
@@ -102,6 +100,8 @@ class MacroServiceProvider extends ServiceProvider
             return $routes;
         });
 
+
+
         Html::macro('div', function ($content = null, $options = []) {
             return Html::tag('div', $content, $options);
         });
@@ -157,6 +157,6 @@ class MacroServiceProvider extends ServiceProvider
             return Html::div($input . $span, ['class' => 'input-group']);
         });
 
-        Blade::component(Boolean::class,'boolean');
+        Blade::component(Boolean::class, 'boolean');
     }
 }

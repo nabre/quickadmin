@@ -2,7 +2,7 @@
 
 namespace Nabre\Quickadmin\Forms\User;
 
-use Nabre\Quickadmin\Models\Contact as Model;
+use App\Models\Contact as Model;
 use Nabre\Quickadmin\Repositories\Form\Form;
 
 class ProfileForm extends Form

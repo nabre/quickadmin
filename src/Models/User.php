@@ -55,12 +55,17 @@ class User extends JUser implements AuthenticatableContract, AuthorizableContrac
     protected $dates = ['email_verified_at'];
     function contact(): HasOne
     {
-        return $this->hasOne(Contact::class,'account_id');
+        return $this->hasOne(Contact::class, 'account_id');
     }
 
     function settings(): HasMany
     {
         return $this->hasMany(Setting::class);
+    }
+
+    function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     function getLvlRoleAttribute()

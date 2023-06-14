@@ -16,6 +16,7 @@ class Item
     use VariableSupport;
     protected $builder;
 
+
     function __construct($builder, $variable, $output = null)
     {
         $this->builder = $builder;
@@ -170,6 +171,7 @@ class Item
 
     function label(?string $label = null)
     {
+        /*
         if (is_null($label)) {
             $label = function ($data) {
                 $label = $this->get(FormConst::VARIABLE);
@@ -179,7 +181,7 @@ class Item
                 }
                 return $label;
             };
-        }
+        }*/
 
         $this->set(FormConst::LABEL, $label, false);
         return $this;

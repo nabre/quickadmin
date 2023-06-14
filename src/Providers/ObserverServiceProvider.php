@@ -2,11 +2,11 @@
 
 namespace Nabre\Quickadmin\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Nabre\Quickadmin\Models\Contact;
 use App\Models\User;
-use Nabre\Quickadmin\Observers\ContactObserver;
+use App\Models\Contact;
+use Illuminate\Support\ServiceProvider;
 use Nabre\Quickadmin\Observers\UserObserver;
+use Nabre\Quickadmin\Observers\ContactObserver;
 
 class ObserverServiceProvider extends ServiceProvider
 {

@@ -50,9 +50,4 @@ class UserPolicy
     {
         return true;
     }
-
-    public function delete_force(User $user,  Model $model)
-    {
-        return true;
-    }
 }

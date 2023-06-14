@@ -26,6 +26,7 @@ class GenerateMenu
             $idBSet = Page::add($menu, 'quickadmin.builder.settings.rdr', null, true, true);
             Page::add($menu, 'quickadmin.builder.settings.list.index', $idBSet, true, true);
             Page::add($menu, 'quickadmin.builder.settings.type.index', $idBSet, true, true);
+            Page::add($menu, 'quickadmin.builder.settings.refresh.index', $idBSet, true, true);
         }, ['active_element'   => 'link']);
 
         Menu::make('ManageBar', function ($menu) {
@@ -41,8 +42,16 @@ class GenerateMenu
             Page::add($menu, 'quickadmin.user.settings.index', null, true, true);
         }, ['active_element'   => 'link']);
 
+        Menu::make('ShopBar', function ($menu) {
+            Page::add($menu, 'quickadmin.shop.products', null, true, true);
+            Page::add($menu, 'quickadmin.shop.cart', null, true, true);
+            Page::add($menu, 'quickadmin.shop.invoice', null, true, true);
+
+        }, ['active_element'   => 'link']);
+
         Menu::make('QuickBar', function ($menu) {
             Page::add($menu, 'quickadmin.user.rdr', null, true);
+            Page::add($menu, 'quickadmin.shop.rdr', null, true);
             Page::add($menu, 'quickadmin.manage.rdr', null, true);
             Page::add($menu, 'quickadmin.admin.rdr', null, true);
             Page::add($menu, 'quickadmin.builder.rdr', null, true);
@@ -66,18 +75,24 @@ class GenerateMenu
 
             $idAdmin = Page::add($menu, 'quickadmin.admin.rdr');
             Page::add($menu, 'quickadmin.admin.settings.index', $idAdmin);
+            $idUsers = Page::add($menu, 'quickadmin.admin.users.rdr', $idAdmin);
+            Page::add($menu, 'quickadmin.admin.users.list.index', $idUsers);
+            Page::add($menu, 'quickadmin.admin.users.roles.index', $idUsers);
+            Page::add($menu, 'quickadmin.admin.users.permissions.index', $idUsers);
+            Page::add($menu, 'quickadmin.admin.users.impersonate.index', $idUsers);
 
             $idBuilder = Page::add($menu, 'quickadmin.builder.rdr');
             Page::add($menu, 'quickadmin.builder.settings.index', $idBuilder);
             $idBSet = Page::add($menu, 'quickadmin.builder.settings.rdr', $idBuilder);
             Page::add($menu, 'quickadmin.builder.settings.list.index', $idBSet);
             Page::add($menu, 'quickadmin.builder.settings.type.index', $idBSet);
+            Page::add($menu, 'quickadmin.builder.settings.refresh.index', $idBSet);
 
-            $idUsers = Page::add($menu, 'quickadmin.admin.users.rdr', $idAdmin);
-            Page::add($menu, 'quickadmin.admin.users.list.index', $idUsers);
-            Page::add($menu, 'quickadmin.admin.users.roles.index', $idUsers);
-            Page::add($menu, 'quickadmin.admin.users.permissions.index', $idUsers);
-            Page::add($menu, 'quickadmin.admin.users.impersonate.index', $idUsers);
+            $idShop = Page::add($menu, 'quickadmin.shop.rdr');
+            Page::add($menu, 'quickadmin.shop.products', $idShop);
+            Page::add($menu, 'quickadmin.shop.cart', $idShop);
+            Page::add($menu, 'quickadmin.shop.invoice', $idShop);
+
             $idLogin = Page::add($menu, 'login');
             Page::add($menu, 'password.request', $idLogin);
             Page::add($menu, 'password.reset', $idLogin);

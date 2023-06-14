@@ -14,11 +14,15 @@ class SettingCommand extends Command
     public function handle()
     {
         Artisan::call('optimize');
-
         $configKey = config('setting.override');
         collect($configKey)->each(function ($key) {
-            $data = [config('setting.database.key') => $key];
+            $data = [
+                config('setting.database.key') => $key,
+            ];
             $set = Model::where(config('setting.database.key'), $key)->whereDoesntHave('user')->firstOrCreate();
+            $set->recursiveSave($data);
+
+            $data=['roles'=>$set->role];
             $set->recursiveSave($data);
         });
         Model::whereNotIn(config('setting.database.key'), $configKey)->delete();

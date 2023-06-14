@@ -14,14 +14,16 @@ class OptimizeCommand extends Command
 
     public function handle()
     {
+        
         parent::{__FUNCTION__}();
 
         $this->components->info('Syncronize database\'s data');
 
         collect([
             'permission' => fn () => $this->callSilent('update:permission') == 0,
-            'settings' => fn () => $this->callSilent('sync:setting') == 0,
             'field types' => fn () => $this->callSilent('sync:field-type') == 0,
+            'settings' => fn () => $this->callSilent('sync:setting') == 0,
+            'user' => fn () => $this->callSilent('update:user') == 0,
         ])->each(fn ($task, $description) => $this->components->task($description, $task));
 
         $this->newLine();

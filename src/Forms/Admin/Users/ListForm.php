@@ -15,8 +15,16 @@ class ListForm extends Form
     {
         $this->add('email')->required()->unique()->email();
         $this->add('name')->required();
-        $this->add('contact')->onlyList()->list('full_name');
+        $this->add('contact')->onlyList()->list('fullname');
+      /* $this->add('Con')->value(function ($data) {
+            $contact = $data->contact;
 
+            if (config('setting.define.autousergenerate') && is_null($contact)) {
+                return 'Aggiungi contatto';
+            } elseif(!is_null($contact)) {
+                return data_get($data->contact, 'fullname') . '<br>Rimuovi contatto';
+            }
+        })->onlyList();*/
 
         $rolesDisabled = function ($data) {
             $min = auth()->user()->roles->min('priority');
@@ -27,7 +35,8 @@ class ListForm extends Form
             return Role::where('priority', $logic, $min)->get()->pluck('id')->toArray();
         };
         $rolesQuery = function ($data, $model) {
-            return $model->get();
+            //$min = auth()->user()->roles->min('priority');
+            return $model->get(); //->where('priority','>=', $min)->get();
         };
         $this->add('roles')->listDisabled($rolesDisabled)->list('eti', $rolesQuery);
 

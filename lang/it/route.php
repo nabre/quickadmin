@@ -55,6 +55,12 @@ return [
                 'index' => 'Impostazioni',
             ],
         ],
+        'shop'=>[
+            'rdr'=>'Negozio',
+            'cart'=>'Carrello',
+            'invoice'=>'Fatture',
+            'products'=>'Prodotti',
+        ],
         'builder' => [
             'rdr' => 'Costruttore',
             'dashboard' => [

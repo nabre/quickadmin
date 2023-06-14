@@ -3,7 +3,7 @@ return [
     'welcome' => 'fa-solid fa-house',
     'login' => 'fa-solid fa-right-to-bracket',
     'logout' => 'fa-solid fa-right-from-bracket',
-    'register'=>'fa-solid fa-user-plus',
+    'register' => 'fa-solid fa-user-plus',
     'quickadmin' => [
         'admin' =>
         [
@@ -62,6 +62,12 @@ return [
             'settings' => [
                 'index' => 'fa-solid fa-sliders',
             ],
+        ],
+        'shop' => [
+            'rdr' => 'fa-solid fa-cart-shopping',
+            'cart' => 'fa-solid fa-cart-shopping',
+            'invoice'=>'fa-solid fa-file-invoice',
+            'products'=>'fa-solid fa-shop',
         ],
         'builder' => [
             'rdr' => 'fa-solid fa-tower-observation',

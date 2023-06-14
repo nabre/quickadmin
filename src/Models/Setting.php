@@ -71,8 +71,7 @@ class Setting extends Model
 
     function getUserSettingDisableAttribute()
     {
-        return !$this->roles->count();
-        return is_null($this->role);
+        return $this->roles->count();
     }
 
     function getRoleAttribute(){
