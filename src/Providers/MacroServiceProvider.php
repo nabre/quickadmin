@@ -4,6 +4,7 @@ namespace Nabre\Quickadmin\Providers;
 
 use Collective\Html\HtmlFacade as Html;
 use Collective\Html\FormFacade as Form;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
@@ -19,6 +20,34 @@ class MacroServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        /**
+         * Paginate a standard Laravel Collection.
+         *
+         * @param int $perPage
+         * @param int $total
+         * @param int $page
+         * @param string $pageName
+         * @return array
+         */
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
+            if (!$this->count()) {
+                return $this;
+            }
+            
+            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+            return new LengthAwarePaginator(
+                $this->forPage($page, $perPage ?? $this->count()),
+                $total ?: $this->count(),
+                $perPage ?? $this->count(),
+                $page,
+                [
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => $pageName,
+                ]
+            );
+        });
+
+
         Collection::macro('whereDoesntHave', function ($key) {
             return $this->filter(function ($item) use ($key) {
                 $string = Str::random(40);

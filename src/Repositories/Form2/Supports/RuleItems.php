@@ -14,7 +14,8 @@ trait RuleItems{
 
     function unique()
     {
-        $rule = Rule::unique($this->builder->getModel(), $this->get(FormConst::VARIABLE), $this->builder->getIdData(), $this->builder->getKeyName());
+        $id='{{idData}}';
+        $rule = Rule::unique($this->builder->getModel(), $this->get(FormConst::VARIABLE), $id, $this->builder->getKeyName());
         $this->rules($rule);
         return $this;
     }

@@ -70,7 +70,7 @@ class Field
     {
         if (!is_null($wire = data_get($this->elem, FormConst::OPTIONS_WIREMODEL))) {
             data_set($this->elem, FormConst::OPTIONS_WIREMODEL, null);
-            $this->setOption('wire:model.defer', $wire);
+            $this->setOption('wire:model', $wire);
         }
         return (array)data_get($this->elem, FormConst::OPTIONS);
     }

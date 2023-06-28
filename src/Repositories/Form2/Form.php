@@ -14,19 +14,14 @@ class Form
 
     protected $model;
     protected $data;
-    protected $MODE;
 
-    protected $method;
     protected $prefix;
     protected $write;
     protected array $arrayFields = [];
     protected $key;
     protected array $customCRUD = [];
 
-    function __construct($MODE = null)
-    {
-        $this->MODE = $MODE;
-    }
+    var $paginateItem;
 
     static function public($mode = null, $idData = null)
     {
@@ -52,14 +47,22 @@ class Form
         }
     }
 
-    function F($id = null)
+    function paginateItem(?int $num = null)
     {
-        $this->data = $this->getModel()::findOrNew($id);
-        if ($this->write) {
-            $this->methodForm();
-        }
-        $this->editSructure(__FUNCTION__);
-        return $this->variablesView($this->data, __FUNCTION__, $this->write);
+        return $this->paginateItem ?? ($this->paginateItem = $num);
+    }
+
+    var $results;
+    function callQuery(bool $trash = false, bool $force = false)
+    {
+        return $trash ?
+            (($force ? null : $this->results['trash']) ?? ($this->results['trash'] = ($this->getTrashMode() ? $this->getModel()::onlyTrashed()->get() : false)))
+            : (($force ? null : $this->results['list']) ?? ($this->results['list'] = $this->getQuery()));
+    }
+
+    function countResults(bool $trash = false)
+    {
+        return ($query = $this->callQuery($trash, true)) ? $query->count() : false;
     }
 
     function getQuery()
@@ -67,9 +70,10 @@ class Form
         return $this->getModel()::get();
     }
 
-    private function variablesView($i, $fn, $write = false)
+    function variablesView($i, $fields, $write = true)
     {
-        $array = $this->valuesArray($i, $fn, FALSE);
+        $array = $this->valuesArray($i, $fields,  $write);
+
         $this->elements->filter(function ($i) {
             return !is_null(data_get($i, FormConst::REL));
         })->each(function ($i) use (&$array, $write) {
@@ -94,43 +98,18 @@ class Form
         return $array;
     }
 
-    function L()
+    function valuesArray($i, $fields, $write)
     {
-        $fn = __FUNCTION__;
-        $this->editSructure($fn);
-
-        $query = $this->getQuery();
-
-        return [
-            'LE' => $query->mapWithKeys(function ($i) use ($fn) {
-                return [data_get($i, $this->getKeyName()) => $this->valuesArray($i, $fn, TRUE)];
-            }),
-            'LV' => $query->mapWithKeys(function ($i) use ($fn) {
-                return [data_get($i, $this->getKeyName()) => $this->variablesView($i, $fn)];
-            }),
-            'TV' => $this->getTrashMode() ? $this->getModel()::onlyTrashed()->get()->mapWithKeys(function ($i) {
-                return [data_get($i, $this->getKeyName()) => $this->variablesView($i, 'T')];
-            }) : NULL
-        ];
-    }
-
-    function valuesArray($i, $type, $write = null)
-    {
-        $write = $write ?? $this->write;
-        $array = $i->readArray($this->arrayFields, $write);
-        if (!$this->write) {
-            // $array;
-        }
-        if (in_array(FormConst::CRUD_VAR_NAME, $this->arrayFields)) {
-            data_set($array, FormConst::CRUD_VAR_NAME, $this->crudBuildItem($i, $type));
+        $array = $i->readArray($fields, $write);
+        if (in_array(FormConst::CRUD_VAR_NAME, $fields)) {
+            data_set($array, FormConst::CRUD_VAR_NAME, $this->crudBuildItem($i));
         }
         return $array;
     }
 
-    function editSructure($type = null)
+    function buildStructure()
     {
-        $this->eloquent();
-
+        $this->getEloquent();
         $this->elements = new CollectionElements();
         $this->build();
 
@@ -169,11 +148,7 @@ class Form
         );
 
         //CRUD
-        if (!is_null($type)) {
-            $this->addCrud($type);
-        }
-
-        $this->arrayFields = collect($this->elements)->pluck('variable')->push($this->getKeyName())->unique()->filter()->sort()->toArray();
+        $this->addCrud();
         return $this;
     }
 
@@ -206,26 +181,15 @@ class Form
                 $value = data_get($i, FormConst::RULES);
                 return [$key => $value];
             })->toArray())
-        )->mapWithKeys(function ($value, $key) {
-            return [$this->prefix . "." . $key => $value];
-        })->toArray();
+        )->filter()->toArray();
     }
 
     function getTrashMode()
     {
-        return (bool) count(array_intersect(['Illuminate\Database\Eloquent\SoftDeletes', "Jenssegers\Mongodb\Eloquent\SoftDeletes"], class_uses($this->getEloquent())));
-    }
-
-    function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-        return $this;
-    }
-
-    function setMode($mode)
-    {
-        $this->write = ($mode == 'E');
-        return $this;
+        return (bool) count(array_intersect(
+            ['Illuminate\Database\Eloquent\SoftDeletes', "Jenssegers\Mongodb\Eloquent\SoftDeletes"],
+            class_uses($this->getEloquent())
+        ));
     }
 
     function setCustomCRUD(array $array)
@@ -239,17 +203,9 @@ class Form
         return $this->data;
     }
 
-    function getMode()
-    {
-        return $this->write;
-    }
-
     function getElements()
     {
-        $mode = substr($this->MODE, 0, 1);
-        return $this->elements->filter(function ($i) use ($mode) {
-            return in_array($mode, data_get($i, FormConst::VIEW));
-        });
+        return $this->elements;
     }
 
     function getKeyName()
@@ -267,18 +223,9 @@ class Form
         return data_get($this->data, $this->getKeyName());
     }
 
-    private function methodForm()
+    function setPrefix($prefix)
     {
-        if (is_null($this->getIdData())) {
-            $this->method = self::$create;
-        } else {
-            $this->method = self::$update;
-        }
-        return $this->method;
-    }
-
-    function getMethod()
-    {
-        return $this->method ?? $this->methodForm();
+        $this->prefix = $prefix;
+        return $this;
     }
 }

@@ -12,8 +12,8 @@ class NewForm extends Form
 
     function build()
     {
-        $this->add('name')->rules(Rule::required(),Rule::min(5));
-        $this->add('email')->rules(Rule::email());
+        $this->add('name')->rules(Rule::required(),Rule::min(3))->unique();
+        $this->add('email')->rules(Rule::required(),Rule::email(),Rule::min(5))->unique();
         $this->add('role')->list('eti');
     }
 }

@@ -29,77 +29,54 @@ trait AddItems
         return $item;
     }
 
-    function crudBuildItem($i, $type)
+    function crudBuildItem($i)
     {
         $crud = collect([]);
-        switch ($type) {
-            case "L":
-                $view = Gate::inspect('view', $i)->allowed() && data_get($this->customCRUD, 'view', $this->defCrud);
-                $crud->put('view', $view);
-                $delete = Gate::inspect('delete', $i)->allowed() && data_get($this->customCRUD, 'delete', $this->defCrud);
-                $trashed = (bool) data_get($data = $i, 'deleted_at') && method_exists($data, 'trashed');
-                $crud->put('delete_confirm', !$trashed && $delete  && data_get($this->customCRUD, 'delete_confirm', $this->defCrud));
-                $crud->put('delete', !$trashed && $delete);
-                switch ($this->write) {
-                    case true:
-                        break;
-                    default:
-                        $update = Gate::inspect('update', $i)->allowed() && data_get($this->customCRUD, 'update', $this->defCrud);
-                        $copy = Gate::inspect('copy', $i)->allowed()  && data_get($this->customCRUD, 'copy', $this->defCrud);
-                        $copyField = $this->elements->where(FormConst::OUTPUT_EDIT, Field::TEXT)->count();
-                        #stato
-                        $crud->put('edit', !$trashed && $update) && data_get($this->customCRUD, 'edit', $this->defCrud);
-                        $crud->put('copy', !$trashed && $copy && $copyField)  && data_get($this->customCRUD, 'copy', $this->defCrud);
-                        break;
-                }
-                break;
-            case "F":
-                switch ($this->write) {
-                    case true:
-                        $update = Gate::inspect('update', $i)->allowed()  && data_get($this->customCRUD, 'update', $this->defCrud);
-                        $trashed = (bool) data_get($data = $i, 'deleted_at') && method_exists($data, 'trashed');
 
-                        #stato
-                        $crud->put('save', !$trashed && $update)  && data_get($this->customCRUD, 'save', $this->defCrud);
-                        $delete = Gate::inspect('delete', $i)->allowed() && data_get($this->customCRUD, 'delete', $this->defCrud);
-                        $crud->put('delete_confirm', !$trashed && $delete  && data_get($this->customCRUD, 'delete_confirm', $this->defCrud));
-                        $crud->put('delete', !$trashed && $delete);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "T":
-                $trashed = (bool) data_get($data = $i, 'deleted_at') && method_exists($data, 'trashed');
-                $delete = Gate::inspect('delete', $i)->allowed()  && data_get($this->customCRUD, 'delete', $this->defCrud);
-                $delete_force = $delete && Gate::inspect('delete_force', $i)->allowed()  && data_get($this->customCRUD, 'delete_force', $this->defCrud);
+        #view
+        $view = Gate::inspect('view', $i)->allowed() && data_get($this->customCRUD, 'view', $this->defCrud);
+        #put
+        $update = Gate::inspect('update', $i)->allowed() && data_get($this->customCRUD, 'update', $this->defCrud);
+        $trashed = (bool) data_get($data = $i, 'deleted_at') && method_exists($data, 'trashed');
+        #copy
+        $copy = Gate::inspect('copy', $i)->allowed()  && data_get($this->customCRUD, 'copy', $this->defCrud);
+        $copyField = $this->elements->where(FormConst::OUTPUT_EDIT, Field::TEXT)->count();
+        #delete
+        $delete = Gate::inspect('delete', $i)->allowed() && data_get($this->customCRUD, 'delete', $this->defCrud);
+        #delete force
+        $delete_force = $delete && Gate::inspect('delete_force', $i)->allowed()  && data_get($this->customCRUD, 'delete_force', $this->defCrud);
+        #stato
+        $update = Gate::inspect('update', $i)->allowed()  && data_get($this->customCRUD, 'update', $this->defCrud);
+        $trashed = (bool) data_get($data = $i, 'deleted_at') && method_exists($data, 'trashed');
 
-                $crud->put('restore', $trashed) && data_get($this->customCRUD, 'restore', $this->defCrud);
-                $crud->put('delete_confirm', $trashed && $delete_force) && data_get($this->customCRUD, 'delete_confirm', $this->defCrud);
-                $crud->put('delete_force', $trashed && $delete_force);
-                break;
+        #stato
+       // $crud->put('view', !$trashed && $view);
+        $crud->put('edit', !$trashed && $update && data_get($this->customCRUD, 'edit', $this->defCrud));
+        $crud->put('copy', !$trashed && $copy && $copyField  && data_get($this->customCRUD, 'copy', $this->defCrud));
+        $crud->put('delete', !$trashed && $delete);
+        $crud->put('restore', $trashed && data_get($this->customCRUD, 'restore', $this->defCrud));
+        $crud->put('delete_force', $trashed && $delete_force);
+
+        $crud = $crud->filter()->keys();
+
+        if ($crud->filter(fn ($v) => in_array($v, ['delete', 'delete_force']))->count()) {
+            $crud->push('delete_confirm');
         }
-        return $crud->filter()->keys()->unique()->sort()->toArray();
+
+        return $crud->unique()->values()->toArray();
     }
 
-    function addCrud(string $type)
+    function addCrud()
     {
         $i = $this->eloquent;
         $crud = collect([]);
-        switch ($type) {
-            case "L":
-                $create = Gate::inspect('create', $i)->allowed() && data_get($this->customCRUD, 'create', $this->defCrud);
-                $sync = $this->syncCallable() && data_get($this->customCRUD, 'sync', $this->defCrud);
-                $crud->put('create', $create);
-                $crud->put('sync', $sync);
-                break;
-            case "F":
-                if (strpos($this->MODE, 'L') !== false) {
-                    $crud->put('back', true);
-                }
-                break;
-        }
-        return $this->add(FormConst::CRUD_VAR_NAME, Field::CRUD)->value($crud->filter()->keys()->sort()->toArray());
+
+        $create = Gate::inspect('create', $i)->allowed() && data_get($this->customCRUD, 'create', $this->defCrud);
+        $sync = $this->syncCallable() && data_get($this->customCRUD, 'sync', $this->defCrud);
+        $crud->put('create', $create);
+        $crud->put('sync', $sync);
+
+        return $this->add(FormConst::CRUD_VAR_NAME, Field::CRUD)->value($crud->filter()->keys()->toArray());
     }
 
     public function addHtml($html)
@@ -114,6 +91,6 @@ trait AddItems
 
     function getEloquent()
     {
-        return $this->eloquent;
+        return $this->eloquent ?? $this->eloquent();
     }
 }
